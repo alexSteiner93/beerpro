@@ -18,6 +18,8 @@ public class Preis implements Entity {
     private String beerId;
     private String userId;
     private String userName;
+    private String beerName;
+    private String currency;
     private float price;
     private Date creationDate;
 
@@ -27,6 +29,17 @@ public class Preis implements Entity {
         this.userId = userId;
         this.userName = userName;
         this.price = price;
+        this.creationDate = creationDate;
+    }
+
+    public Preis(String id, String beerId, String beerName, String userId, String userName, float price, String currency, Date creationDate) {
+        this.id = id;
+        this.beerId = beerId;
+        this.beerName = beerName;
+        this.userId = userId;
+        this.userName = userName;
+        this.price = price;
+        this.currency = currency;
         this.creationDate = creationDate;
     }
 
