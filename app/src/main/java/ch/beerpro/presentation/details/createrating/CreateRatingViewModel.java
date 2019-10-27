@@ -1,3 +1,4 @@
+
 package ch.beerpro.presentation.details.createrating;
 
 import android.net.Uri;

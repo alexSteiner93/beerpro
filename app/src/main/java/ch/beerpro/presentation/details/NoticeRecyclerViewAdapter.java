@@ -14,7 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.GlideApp;
 import ch.beerpro.R;
-import ch.beerpro.domain.models.Notice;
 import ch.beerpro.presentation.utils.EntityDiffItemCallback;
 
 

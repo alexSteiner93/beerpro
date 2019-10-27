@@ -1,3 +1,4 @@
+
 package ch.beerpro.domain.models;
 
 import androidx.annotation.NonNull;
