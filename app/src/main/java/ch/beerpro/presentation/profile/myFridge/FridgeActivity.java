@@ -1,5 +1,5 @@
 
-package ch.beerpro.presentation.profile.mywishlist;
+package ch.beerpro.presentation.profile.myFridge;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -8,7 +8,8 @@ import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ToggleButton;
+
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,14 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.models.FridgeEntry;
 import ch.beerpro.presentation.details.DetailsActivity;
 
-import java.util.List;
-
-import static ch.beerpro.presentation.utils.DrawableHelpers.setDrawableTint;
-
-public class WishlistActivity extends AppCompatActivity implements OnWishlistItemInteractionListener {
+public class FridgeActivity extends AppCompatActivity implements OnFridgeItemInteractionListener{
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -37,32 +34,35 @@ public class WishlistActivity extends AppCompatActivity implements OnWishlistIte
     @BindView(R.id.emptyView)
     View emptyView;
 
-    private WishlistViewModel model;
-    private WishlistRecyclerViewAdapter adapter;
+    private FridgeViewModel model;
+    private FridgeRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_wishlist);
+        setContentView(R.layout.activity_my_fridge);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.title_activity_wishlist));
-
-        model = ViewModelProviders.of(this).get(WishlistViewModel.class);
-        model.getMyWishlistWithBeers().observe(this, this::updateWishlist);
 
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        model = ViewModelProviders.of(this).get(FridgeViewModel.class);
+        model.getMyFridgeWithBeers().observe(this, this::updateFridge);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new WishlistRecyclerViewAdapter(this);
+        adapter = new FridgeRecyclerViewAdapter(this);
 
         recyclerView.setAdapter(adapter);
 
     }
 
-    private void updateWishlist(List<Pair<Wish, Beer>> entries) {
+    public void updateFridgeUI(){
+        model.getMyFridgeWithBeers().observe(this,this::updateFridge);
+    }
+
+    private void updateFridge(List<Pair<FridgeEntry, Beer>> entries) {
         adapter.submitList(entries);
         if (entries.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
@@ -85,7 +85,6 @@ public class WishlistActivity extends AppCompatActivity implements OnWishlistIte
         }
     }
 
-    @Override
     public void onMoreClickedListener(ImageView animationSource, Beer beer) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra(DetailsActivity.ITEM_ID, beer.getId());
@@ -94,9 +93,7 @@ public class WishlistActivity extends AppCompatActivity implements OnWishlistIte
     }
 
     @Override
-    public void onWishClickedListener(Beer beer) {
-        model.toggleItemInWishlist(beer.getId());
+    public void onFridgeClickedListener(Beer beer) {
+        model.toggleBeerToFridge(beer.getId());
     }
-
-
 }

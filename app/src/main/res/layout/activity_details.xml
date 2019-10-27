@@ -145,31 +145,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/name" />
 
-                        <LinearLayout
-                            android:id="@+id/avgPriceLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:orientation="horizontal"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/category">
-
-                            <TextView
-                                android:id="@+id/avgPriceText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Durchschnittlicher Preis" />
-
-                            <TextView
-                                android:id="@+id/avgPrice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="8sp"
-                                android:text="0.0" />
-
-                        </LinearLayout>
-
                         <View
                             android:id="@+id/separator3"
                             android:layout_width="match_parent"
@@ -178,7 +153,7 @@
                             android:layout_marginTop="16dp"
                             android:background="#ffeeeeee"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/avgPriceLayout" />
+                            app:layout_constraintTop_toBottomOf="@+id/category" />
 
                         <RatingBar
                             android:id="@+id/addRatingBar"
@@ -187,7 +162,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
-                            android:isIndicator="true"
+                            android:isIndicator="false"
                             android:numStars="5"
                             android:rating="0"
                             android:stepSize="0.5"
@@ -203,7 +178,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="8dp"
-                            android:text="Meine Durchschnittliche Bewertung"
+                            android:text="Neue Bewertung durch klicken und ziehen hinzufügen"
                             android:textSize="10sp"
                             android:textStyle="italic"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -254,10 +229,24 @@
                                 android:layout_weight="1"
                                 android:drawableTop="@drawable/ic_bookmark_brown_24dp"
                                 android:drawableTint="@android:color/darker_gray"
-                                android:textColor="@android:color/darker_gray"
                                 android:textOff="Wunschliste"
                                 android:textOn="Wunschliste"
+                                android:textColor="@android:color/darker_gray"
                                 android:textSize="10sp" />
+
+                            <ToggleButton
+                                android:id="@+id/fridge"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_bookmark_brown_24dp"
+                                android:drawableTint="@android:color/darker_gray"
+                                android:textOff="Kühlschrank"
+                                android:textOn="Kühlschrank"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="10sp" />
+
 
                             <View
                                 android:layout_width="1dp"
@@ -265,7 +254,7 @@
                                 android:background="#ffeeeeee" />
 
                             <Button
-                                android:id="@+id/shareButton"
+                                android:id="@+id/button2"
                                 style="?android:attr/borderlessButtonStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -280,6 +269,37 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_margin"
+                        android:text="Private Notizen"
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:listitem="@layout/activity_details_notice_listentry" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <View
                 android:layout_width="match_parent"
@@ -312,57 +332,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         tools:listitem="@layout/activity_details_ratings_listentry" />
+
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="8dp" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/noteView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/note"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_margin"
-                        android:text="Persönliche Notiz"
-                        android:textAppearance="?attr/textAppearanceListItem" />
-
-                    <EditText
-                        android:id="@+id/noteText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:ems="10"
-                        android:enabled="false"
-                        android:gravity="start|top"
-                        android:inputType="textMultiLine"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/note" />
-
-                    <Button
-                        android:id="@+id/editNote"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:text="Notiz bearbeiten"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/noteText" />
-                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <View

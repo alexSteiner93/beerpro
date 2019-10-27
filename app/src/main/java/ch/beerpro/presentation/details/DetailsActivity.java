@@ -1,61 +1,42 @@
 package ch.beerpro.presentation.details;
 
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ch.beerpro.GlideApp;
 import ch.beerpro.R;
-import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.Rating;
-import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.models.*;
+import ch.beerpro.presentation.details.CreatePriceActivity;
+import ch.beerpro.presentation.details.createrating.CreateNoticeActivity;
 import ch.beerpro.presentation.details.createrating.CreateRatingActivity;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static ch.beerpro.presentation.utils.DrawableHelpers.setDrawableTint;
 
 public class DetailsActivity extends AppCompatActivity implements OnRatingLikedListener {
 
-    public static final String NOTE_PREFERENCE = "NotePreference";
-    public static final String PRICE_PREFERENCE = "PricePreference";
     public static final String ITEM_ID = "item_id";
     private static final String TAG = "DetailsActivity";
     @BindView(R.id.toolbar)
@@ -82,6 +63,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.wishlist)
     ToggleButton wishlist;
 
+    @BindView((R.id.fridge))
+    ToggleButton fridge;
+
     @BindView(R.id.manufacturer)
     TextView manufacturer;
 
@@ -91,30 +75,17 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.addRatingBar)
     RatingBar addRatingBar;
 
-    @BindView(R.id.note)
-    TextView note;
-
-    @BindView(R.id.noteView)
-    CardView noteView;
-
-    @BindView(R.id.noteText)
-    EditText noteText;
-
-    @BindView(R.id.editNote)
-    Button editNote;
-
-    @BindView(R.id.avgPrice)
-    TextView avgPrice;
-
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.recyclerView2)
+    RecyclerView recyclerView2;
+
     private RatingsRecyclerViewAdapter adapter;
+    private NoticeRecyclerViewAdapter adapter2;
 
     private DetailsViewModel model;
-    private String beerId;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,18 +98,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
                 .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         toolbar.setTitleTextColor(Color.alpha(0));
 
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        Uri data = intent.getData();
-        if (data != null && data.isHierarchical()) {
-            String uri = this.getIntent().getDataString();
-            Log.i("MyApp", "Deep link clicked " + uri);
-            if (Pattern.compile("https://www.beerpro.ch/beer/[a-zA-Z0-9]*$").matcher(uri).matches()) {
-                beerId = uri.replaceAll("https://www.beerpro.ch/beer/", "");
-            }
-        } else {
-            beerId = getIntent().getExtras().getString(ITEM_ID, "");
-        }
+        String beerId = getIntent().getExtras().getString(ITEM_ID);
 
         model = ViewModelProviders.of(this).get(DetailsViewModel.class);
         model.setBeerId(beerId);
@@ -151,56 +111,33 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         model.getBeer().observe(this, this::updateBeer);
         model.getRatings().observe(this, this::updateRatings);
+        model.getMyRatings().observe(this, this::updateMyRatings);
         model.getWish().observe(this, this::toggleWishlistView);
-        model.getMyRatings().observe(this, this::setPersonalAvgRating);
+        model.getNotices().observe(this, this::updateNotices);
+        model.getFridgeEntry().observe(this, this::toggleFridgeView);
 
         recyclerView.setAdapter(adapter);
+        addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
 
-        SharedPreferences settings = getSharedPreferences(NOTE_PREFERENCE, MODE_PRIVATE);
-        editNote.setOnClickListener(getNoteListener());
-        changeVisibilityOfNoteField(settings);
-        updateNote(settings);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
+        recyclerView2.setLayoutManager(layoutManager2);
 
+        adapter2 = new NoticeRecyclerViewAdapter(model.getCurrentUser());
+        recyclerView2.addItemDecoration(new DividerItemDecoration(this, layoutManager2.getOrientation()));
+
+        recyclerView2.setAdapter(adapter2);
     }
 
-    private void setPersonalAvgRating(List<Rating> ratings) {
-        float ratingSum = 0;
-        int ratingCounter = 0;
-        for (Rating rating: ratings) {
-            if (rating.getBeerId().equals(beerId)) {
-                ratingSum += rating.getRating();
-                ratingCounter++;
-            }
+    private void addNewRating(RatingBar ratingBar, float v, boolean fromUser) {
+        if (!fromUser) {
+            return;
         }
-        float ratingAvg = ratingSum / ratingCounter;
-        setPersonalAvgRating(ratingAvg);
-    }
 
-    private void setPersonalAvgRating(float rating) {
-        addRatingBar.setRating(rating);
-    }
-
-    private void addNewRating(RatingBar ratingBar, float v, boolean b) {
         Intent intent = new Intent(this, CreateRatingActivity.class);
         intent.putExtra(CreateRatingActivity.ITEM, model.getBeer().getValue());
         intent.putExtra(CreateRatingActivity.RATING, v);
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, addRatingBar, "rating");
         startActivity(intent, options.toBundle());
-    }
-
-    @OnClick(R.id.shareButton)
-    public void shareBeer() {
-        final Intent intent = new Intent(Intent.ACTION_SEND);
-        final String uri = "https://www.beerpro.ch/beer/" + beerId;
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "Let's share this beer: " + uri + "\n" + manufacturer.getText() + "\n" + name.getText());
-
-        try {
-            startActivity(Intent.createChooser(intent, "Select an action"));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, "This is my Toast message!", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     @OnClick(R.id.actionsButton)
@@ -210,85 +147,33 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         dialog.setContentView(view);
         dialog.show();
 
-        View addPrivateNote = view.findViewById(R.id.addPrivateNote);
-        addPrivateNote.setOnClickListener(getNoteListener());
 
-        View addRating = view.findViewById(R.id.addRating);
-        addRating.setOnClickListener(getRatingListener());
+        view.findViewById(R.id.addPrice).setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(this, CreatePriceActivity.class);
+            intent.putExtra(CreateNoticeActivity.ITEM, model.getBeer().getValue());
+            startActivity(intent);
+        });
 
-        View addPrice = view.findViewById(R.id.addPrice);
-        addPrice.setOnClickListener(getPriceListener());
-    }
+        view.findViewById(R.id.addPrivateNote).setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(this, CreateNoticeActivity.class);
+            intent.putExtra(CreateNoticeActivity.ITEM, model.getBeer().getValue());
+            startActivity(intent);
+        });
 
+        view.findViewById(R.id.addToFridge).setOnClickListener(v -> {
+            dialog.dismiss();
+            model.toggleBeerInFridge(model.getBeer().getValue().getId())
+                    .addOnSuccessListener(task -> onBackPressed())
+                    .addOnFailureListener(error -> Log.e(TAG, "Could not add to fridge", error));
+        });
 
-    private View.OnClickListener getRatingListener() {
-        return view -> {
-            showRatingActivity(view.getContext());
-        };
-    }
+        view.findViewById(R.id.addRating).setOnClickListener(v -> {
+            dialog.dismiss();
+            addNewRating(addRatingBar, addRatingBar.getRating(), true);
+        });
 
-    private void showRatingActivity(Context context) {
-        Intent intent = new Intent(context, CreateRatingActivity.class);
-        intent.putExtra(CreateRatingActivity.ITEM, model.getBeer().getValue());
-        startActivity(intent);
-    }
-
-    private View.OnClickListener getNoteListener() {
-        return view -> {
-            showNoteDialog(view.getContext());
-        };
-    }
-
-    private void showNoteDialog(Context context) {
-        SharedPreferences settings = getSharedPreferences(NOTE_PREFERENCE, MODE_PRIVATE);
-        EditText noteText = new EditText(context);
-        noteText.setHint("Notiz");
-        noteText.setText(settings.getString(beerId, ""));
-        new AlertDialog.Builder(context)
-                .setTitle("Persönliche Notiz")
-                .setView(noteText)
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(beerId, noteText.getText().toString());
-                    editor.commit();
-
-                    changeVisibilityOfNoteField(settings);
-                    updateNote(settings);
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .show();
-    }
-
-    private void changeVisibilityOfNoteField(SharedPreferences settings) {
-        if (settings.contains(beerId)) {
-            noteView.setVisibility(CardView.VISIBLE);
-        } else {
-            noteView.setVisibility(CardView.GONE);
-        }
-    }
-
-    private void updateNote(SharedPreferences settings) {
-        String note = settings.getString(beerId, "");
-        noteText.setText(note);
-    }
-
-    private View.OnClickListener getPriceListener() {
-        return view -> showPriceDialog(view.getContext());
-    }
-
-    private void showPriceDialog(Context context) {
-        EditText price = new EditText(context);
-        price.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        price.setHint("Preis");
-        price.setFilters(new InputFilter[]{new PriceInputFilter()});
-        new AlertDialog.Builder(context)
-                .setTitle("Preis hinzufügen")
-                .setView(price)
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    model.savePrice(beerId, Float.parseFloat(price.getText().toString()));
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .show();
     }
 
     private void updateBeer(Beer item) {
@@ -296,13 +181,15 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         manufacturer.setText(item.getManufacturer());
         category.setText(item.getCategory());
         name.setText(item.getName());
-        GlideApp.with(this).load(item.getPhoto()).apply(new RequestOptions().override(120, 160).centerInside())
+        GlideApp
+                .with(this)
+                .load(item.getPhoto())
+                .apply(new RequestOptions().override(120, 160).centerInside())
                 .into(photo);
         ratingBar.setNumStars(5);
         ratingBar.setRating(item.getAvgRating());
         avgRating.setText(getResources().getString(R.string.fmt_avg_rating, item.getAvgRating()));
         numRatings.setText(getResources().getString(R.string.fmt_ratings, item.getNumRatings()));
-        avgPrice.setText(String.valueOf(item.getAvgPrice()));
         toolbar.setTitle(item.getName());
     }
 
@@ -310,9 +197,45 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         adapter.submitList(new ArrayList<>(ratings));
     }
 
+    private void updateMyRatings(List<Rating> ratings) {
+        if (ratings.size() > 0) {
+            Rating mostRecentRating = ratings.get(0);
+            addRatingBar.setIsIndicator(true);
+            addRatingBar.setRating(mostRecentRating.getRating());
+        }
+    }
+
+    private void updateNotices(List<Notice> notices) {
+        adapter2.submitList(new ArrayList<>(notices));
+    }
+
     @Override
     public void onRatingLikedListener(Rating rating) {
         model.toggleLike(rating);
+    }
+
+
+    @OnClick(R.id.fridge)
+    public void onFridgeClickedListener(View view) {
+        model.toggleBeerInFridge(model.getBeer().getValue().getId());
+        /*
+         * We won't get an update from firestore when the wish is removed, so we need to reset the UI state ourselves.
+         * */
+        if (!fridge.isChecked()) {
+            toggleFridgeView(null);
+        }
+    }
+
+    private void toggleFridgeView(FridgeEntry fridgeContent) {
+        if (fridgeContent != null) {
+            int color = getResources().getColor(R.color.colorPrimary);
+            setDrawableTint(fridge, color);
+            fridge.setChecked(true);
+        } else {
+            int color = getResources().getColor(android.R.color.darker_gray);
+            setDrawableTint(fridge, color);
+            fridge.setChecked(false);
+        }
     }
 
     @OnClick(R.id.wishlist)

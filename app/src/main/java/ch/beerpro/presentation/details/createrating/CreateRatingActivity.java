@@ -1,44 +1,38 @@
+
 package ch.beerpro.presentation.details.createrating;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
-
-import com.bumptech.glide.request.RequestOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.yalantis.ucrop.UCrop;
-
-import java.io.File;
-import java.util.List;
-import java.util.UUID;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.GlideApp;
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.yalantis.ucrop.UCrop;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
 import pl.tajchert.nammu.PermissionCallback;
+
+import java.io.File;
+import java.util.List;
+import java.util.UUID;
 
 public class CreateRatingActivity extends AppCompatActivity {
 
@@ -68,6 +62,7 @@ public class CreateRatingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notice);
         setContentView(R.layout.activity_rating);
         ButterKnife.bind(this);
         Nammu.init(this);

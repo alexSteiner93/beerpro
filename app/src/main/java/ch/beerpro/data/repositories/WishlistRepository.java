@@ -1,9 +1,13 @@
+
 package ch.beerpro.data.repositories;
 
 import android.util.Pair;
-
 import androidx.lifecycle.LiveData;
-
+import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.Entity;
+import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.utils.FirestoreQueryLiveData;
+import ch.beerpro.domain.utils.FirestoreQueryLiveDataArray;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -14,18 +18,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.Entity;
-import ch.beerpro.domain.models.Wish;
-import ch.beerpro.domain.utils.FirestoreQueryLiveData;
-import ch.beerpro.domain.utils.FirestoreQueryLiveDataArray;
-
 import static androidx.lifecycle.Transformations.map;
 import static androidx.lifecycle.Transformations.switchMap;
 import static ch.beerpro.domain.utils.LiveDataExtensions.combineLatest;
 
 public class WishlistRepository {
-
 
     private static LiveData<List<Wish>> getWishesByUser(String userId) {
         return new FirestoreQueryLiveDataArray<>(FirebaseFirestore.getInstance().collection(Wish.COLLECTION)
@@ -85,6 +82,5 @@ public class WishlistRepository {
 
         return switchMap(combineLatest(currentUserId, beer), WishlistRepository::getUserWishListFor);
     }
-
 
 }

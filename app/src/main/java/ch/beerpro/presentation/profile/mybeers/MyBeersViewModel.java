@@ -1,28 +1,20 @@
+
 package ch.beerpro.presentation.profile.mybeers;
 
 import android.util.Pair;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
+import ch.beerpro.data.repositories.*;
+import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.Rating;
+import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.models.MyBeer;
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import ch.beerpro.data.repositories.BeersRepository;
-import ch.beerpro.data.repositories.CurrentUser;
-import ch.beerpro.data.repositories.MyBeersRepository;
-import ch.beerpro.data.repositories.PreisRepository;
-import ch.beerpro.data.repositories.RatingsRepository;
-import ch.beerpro.data.repositories.WishlistRepository;
-import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.MyBeer;
-import ch.beerpro.domain.models.Preis;
-import ch.beerpro.domain.models.Rating;
-import ch.beerpro.domain.models.Wish;
 
 import static androidx.lifecycle.Transformations.map;
 import static ch.beerpro.domain.utils.LiveDataExtensions.zip;
@@ -41,15 +33,13 @@ public class MyBeersViewModel extends ViewModel implements CurrentUser {
         BeersRepository beersRepository = new BeersRepository();
         MyBeersRepository myBeersRepository = new MyBeersRepository();
         RatingsRepository ratingsRepository = new RatingsRepository();
-        PreisRepository priceRepository = new PreisRepository();
 
         LiveData<List<Beer>> allBeers = beersRepository.getAllBeers();
         MutableLiveData<String> currentUserId = new MutableLiveData<>();
         LiveData<List<Wish>> myWishlist = wishlistRepository.getMyWishlist(currentUserId);
         LiveData<List<Rating>> myRatings = ratingsRepository.getMyRatings(currentUserId);
-        LiveData<List<Preis>> myPrices = priceRepository.getMyPrices(currentUserId);
 
-        LiveData<List<MyBeer>> myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myPrices);
+        LiveData<List<MyBeer>> myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings);
 
         myFilteredBeers = map(zip(searchTerm, myBeers), MyBeersViewModel::filter);
 

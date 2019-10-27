@@ -1,27 +1,18 @@
 package ch.beerpro.presentation;
 
 import android.util.Pair;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
+import ch.beerpro.data.repositories.*;
+import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.FridgeEntry;
+import ch.beerpro.domain.models.MyBeer;
+import ch.beerpro.domain.models.Rating;
+import ch.beerpro.domain.models.Wish;
 import com.google.android.gms.tasks.Task;
 
 import java.util.List;
-
-import ch.beerpro.data.repositories.BeersRepository;
-import ch.beerpro.data.repositories.CurrentUser;
-import ch.beerpro.data.repositories.LikesRepository;
-import ch.beerpro.data.repositories.MyBeersRepository;
-import ch.beerpro.data.repositories.PreisRepository;
-import ch.beerpro.data.repositories.RatingsRepository;
-import ch.beerpro.data.repositories.WishlistRepository;
-import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.MyBeer;
-import ch.beerpro.domain.models.Preis;
-import ch.beerpro.domain.models.Rating;
-import ch.beerpro.domain.models.Wish;
 
 /**
  * This is the viewmodel for the {@link MainActivity}, which is also used by the three pages/fragments contained in it.
@@ -34,10 +25,12 @@ public class MainViewModel extends ViewModel implements CurrentUser {
     private final LikesRepository likesRepository;
     private final RatingsRepository ratingsRepository;
     private final WishlistRepository wishlistRepository;
+    private final FridgeRepository fridgeRepository;
 
     private final LiveData<List<Wish>> myWishlist;
     private final LiveData<List<Rating>> myRatings;
     private final LiveData<List<MyBeer>> myBeers;
+    private final LiveData<List<FridgeEntry>> fridgeEntry;
 
     public MainViewModel() {
         /*
@@ -47,7 +40,7 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         likesRepository = new LikesRepository();
         wishlistRepository = new WishlistRepository();
         ratingsRepository = new RatingsRepository();
-        PreisRepository priceRepository = new PreisRepository();
+        fridgeRepository = new FridgeRepository();
         MyBeersRepository myBeersRepository = new MyBeersRepository();
 
         LiveData<List<Beer>> allBeers = beersRepository.getAllBeers();
@@ -55,8 +48,8 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         MutableLiveData<String> currentUserId = new MutableLiveData<>();
         myWishlist = wishlistRepository.getMyWishlist(currentUserId);
         myRatings = ratingsRepository.getMyRatings(currentUserId);
-        LiveData<List<Preis>> myPrices = priceRepository.getMyPrices(currentUserId);
-        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myPrices);
+        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings);
+        fridgeEntry = fridgeRepository.getMyFridge(currentUserId);
 
         /*
          * Set the current user id, which is used as input for the getMyWishlist and getMyRatings calls above.
@@ -88,6 +81,9 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         return beersRepository.getBeerManufacturers();
     }
 
+    public LiveData<List<FridgeEntry>> getMyFridgeEntry() { return fridgeEntry;}
+
+
     public void toggleLike(Rating rating) {
         likesRepository.toggleLike(rating);
     }
@@ -98,5 +94,9 @@ public class MainViewModel extends ViewModel implements CurrentUser {
 
     public LiveData<List<Pair<Rating, Wish>>> getAllRatingsWithWishes() {
         return ratingsRepository.getAllRatingsWithWishes(myWishlist);
+    }
+
+    public Task<Void> toggleItemInFridge (String itemId) {
+        return fridgeRepository.toggleUserFridgeItem(getCurrentUser().getUid(), itemId);
     }
 }
