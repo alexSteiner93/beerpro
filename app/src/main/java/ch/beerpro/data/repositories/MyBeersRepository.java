@@ -1,17 +1,23 @@
-
 package ch.beerpro.data.repositories;
 
 import androidx.lifecycle.LiveData;
+
+import org.apache.commons.lang3.tuple.Triple;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.Entity;
-import ch.beerpro.domain.models.Rating;
-import ch.beerpro.domain.models.Wish;
 import ch.beerpro.domain.models.MyBeer;
 import ch.beerpro.domain.models.MyBeerFromRating;
 import ch.beerpro.domain.models.MyBeerFromWishlist;
-import org.apache.commons.lang3.tuple.Triple;
-
-import java.util.*;
+import ch.beerpro.domain.models.Rating;
+import ch.beerpro.domain.models.Wish;
 
 import static androidx.lifecycle.Transformations.map;
 import static ch.beerpro.domain.utils.LiveDataExtensions.combineLatest;

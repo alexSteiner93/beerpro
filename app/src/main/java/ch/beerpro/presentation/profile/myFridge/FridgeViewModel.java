@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import ch.beerpro.data.repositories.BeersRepository;
 import ch.beerpro.data.repositories.CurrentUser;
-import ch.beerpro.data.repositories.FridgeRepository;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.FridgeEntry;
 
