@@ -102,11 +102,10 @@ public class MyBeersRepository {
                 MyBeersRepository::getMyBeers);
     }
     /*
-
     public LiveData<List<MyBeer>> getMyBeers(LiveData<List<Beer>> allBeers, LiveData<List<Wish>> myWishlist,
                                              LiveData<List<Rating>> myRatings, LiveData<List<Fridge>> myFridge) {
         return map(combineLatest(myWishlist, myRatings, myFridge, map(allBeers, Entity::entitiesById)),
                 MyBeersRepository::getMyBeers);
     }
-    */
+*/
 }

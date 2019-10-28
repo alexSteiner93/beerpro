@@ -48,6 +48,8 @@ import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
 import ch.beerpro.presentation.details.createrating.CreateRatingActivity;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 
 import static ch.beerpro.presentation.utils.DrawableHelpers.setDrawableTint;
 
@@ -281,5 +283,31 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     public void updatePrice(float priceInput) {
         model.updateBeerPrice(priceInput);
+    }
+
+
+    @OnClick(R.id.shareButton)
+    public void onShareBeerClickedListener(View view) {
+        String beer = model.getBeer().getValue().getId();
+        Uri.Builder builder = new Uri.Builder();
+
+        builder.scheme("https")
+                .authority("beerpro.page.link")
+                .appendPath("beerdetails")
+                .appendQueryParameter("beer", beer);
+
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(builder.build())
+                .setDynamicLinkDomain("beerpro.page.link")
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                .buildDynamicLink();
+
+        Uri dynamicLinkUri = dynamicLink.getUri();
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Link:" + dynamicLinkUri.toString());
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, ""));
     }
 }
