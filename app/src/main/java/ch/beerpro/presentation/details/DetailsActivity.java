@@ -104,7 +104,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     private RatingsRecyclerViewAdapter adapter;
 
     private DetailsViewModel model;
-    private String beerId;
+    private String itemid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,13 +200,13 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
         EditText noteText = new EditText(context);
         noteText.setHint("Notiz");
-        noteText.setText(settings.getString(beerId, ""));
+        noteText.setText(settings.getString(itemid, ""));
         new AlertDialog.Builder(context)
-                .setTitle("Persönliche Notiz")
+                .setTitle("Ihre Persönliche Notiz")
                 .setView(noteText)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(beerId, noteText.getText().toString());
+                    editor.putString(itemid, noteText.getText().toString());
                     editor.commit();
 
                     changeVisibilityOfNoteField(settings);
@@ -248,7 +248,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
 
     private void changeVisibilityOfNoteField(SharedPreferences settings) {
-        if (settings.contains(beerId)) {
+        if (settings.contains(itemid)) {
             noteView.setVisibility(CardView.VISIBLE);
         } else {
             noteView.setVisibility(CardView.GONE);
@@ -256,7 +256,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     }
 
     private void updateNote(SharedPreferences settings) {
-        String note = settings.getString(beerId, "");
+        String note = settings.getString(itemid, "");
         noteText.setText(note);
     }
 }
