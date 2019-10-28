@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import ch.beerpro.presentation.details.Price.PriceFragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import androidx.fragment.app.DialogFragment;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,6 +80,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     @BindView(R.id.wishlist)
     ToggleButton wishlist;
+
+    @BindView(R.id.avgPrice)
+    TextView avgPrice;
 
     @BindView(R.id.manufacturer)
     TextView manufacturer;
@@ -153,10 +158,19 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @OnClick(R.id.actionsButton)
     public void showBottomSheetDialog() {
         View view = getLayoutInflater().inflate(R.layout.single_bottom_sheet_dialog, null);
+        view.findViewById(R.id.addPrice).setOnClickListener(v -> {
+            DialogFragment newFragment = new PriceFragment();
+            newFragment.show(getSupportFragmentManager(), "missiles");
+
+        });
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(view);
         dialog.show();
-
+/*
+        view.findViewById(R.id.addToFridge).setOnClickListener((x) -> {
+            model.addBeerToFridge(x);
+            dialog.dismiss();
+        });*/
 
         View addPrivateNote = view.findViewById(R.id.addPrivateNote);
         addPrivateNote.setOnClickListener(getNoteListener());
@@ -174,6 +188,11 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         avgRating.setText(getResources().getString(R.string.fmt_avg_rating, item.getAvgRating()));
         numRatings.setText(getResources().getString(R.string.fmt_ratings, item.getNumRatings()));
         toolbar.setTitle(item.getName());
+        if (item.getNumPrices() == 0) { avgPrice.setText("Kein Preis Vorhanden");}
+        else {
+            avgPrice.setText("Preis(CHF): " + item.getMinPrice() + " - " + item.getMaxPrice() +
+                    ", Durchschnitt: " + item.getAvgPrice() + " aus " + item.getNumPrices());
+        }
     }
 
     private void updateRatings(List<Rating> ratings) {
@@ -258,5 +277,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     private void updateNote(SharedPreferences settings) {
         String note = settings.getString(itemid, "");
         noteText.setText(note);
+    }
+
+    public void updatePrice(float priceInput) {
+        model.updateBeerPrice(priceInput);
     }
 }

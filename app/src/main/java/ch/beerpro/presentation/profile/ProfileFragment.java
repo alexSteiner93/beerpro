@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.beerpro.presentation.profile.myFridge.MyFridgeActivity;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +31,9 @@ import ch.beerpro.presentation.MainViewModel;
 import ch.beerpro.presentation.profile.mybeers.MyBeersActivity;
 import ch.beerpro.presentation.profile.myratings.MyRatingsActivity;
 import ch.beerpro.presentation.profile.mywishlist.WishlistActivity;
+
+import ch.beerpro.domain.models.Fridge;
+
 
 /**
  * Because the profile view is not a whole activity but rendered as part of the MainActivity in a tab, we use a so-called fragment.
@@ -46,6 +50,9 @@ public class ProfileFragment extends Fragment {
 
     @BindView(R.id.myBeersCount)
     TextView myBeersCount;
+
+    @BindView(R.id.myFridgeCount)
+    TextView myFridgeCount;
 
     @BindView(R.id.myRatingsCount)
     TextView myRatingsCount;
@@ -70,6 +77,7 @@ public class ProfileFragment extends Fragment {
         model.getMyWishlist().observe(this, this::updateWishlistCount);
         model.getMyRatings().observe(this, this::updateRatingsCount);
         model.getMyBeers().observe(this, this::updateMyBeersCount);
+        model.getMyFridge().observe(this, this::updateFridgeCount);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -88,6 +96,14 @@ public class ProfileFragment extends Fragment {
         myBeersCount.setText(String.valueOf(myBeers.size()));
     }
 
+    private void updateFridgeCount(List<Fridge> o) {
+        int sum = 0;
+        for (Fridge f : o) {
+            sum += Integer.valueOf(f.getAmount());
+        }
+        myFridgeCount.setText(String.valueOf(sum));
+    }
+
     @OnClick(R.id.myRatings)
     public void handleMyRatingsClick(View view) {
         Intent intent = new Intent(getActivity(), MyRatingsActivity.class);
@@ -103,6 +119,12 @@ public class ProfileFragment extends Fragment {
     @OnClick(R.id.myBeers)
     public void handleMyBeersClick(View view) {
         Intent intent = new Intent(getActivity(), MyBeersActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.myFridge)
+    public void handleMyFridgeCount(View v) {
+        Intent intent = new Intent(getActivity(), MyFridgeActivity.class);
         startActivity(intent);
     }
 

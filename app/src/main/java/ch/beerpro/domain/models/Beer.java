@@ -9,6 +9,12 @@ import java.io.Serializable;
 public class Beer implements Entity, Serializable {
 
     public static final String COLLECTION = "beers";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_AVGPRICE = "avgPrice";
+    public static final String FIELD_NUMPRICES = "numPrices";
+    public static final String FIELD_MAXPRICE = "maxPrice";
+    public static final String FIELD_MINPRICE = "minPrice";
+
 
     @Exclude
     private String id;
@@ -19,6 +25,10 @@ public class Beer implements Entity, Serializable {
     private float avgRating;
     private int numRatings;
     private float avgPrice;
+    private int numPrices;
+    private float minPrice;
+    private float maxPrice;
+
 
 
     public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings) {
@@ -41,6 +51,21 @@ public class Beer implements Entity, Serializable {
         this.avgRating = avgRating;
         this.numRatings = numRatings;
         this.avgPrice = avgPrice;
+    }
+
+    public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings,
+                float avgPrice,int numPrices, float minPrice, float maxPrice) {
+        this.id = id;
+        this.manufacturer = manufacturer;
+        this.name = name;
+        this.category = category;
+        this.photo = photo;
+        this.avgRating = avgRating;
+        this.numRatings = numRatings;
+        this.avgPrice = avgPrice;
+        this.numPrices = numPrices;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
     }
 
 
@@ -164,4 +189,29 @@ public class Beer implements Entity, Serializable {
     public String toString() {
         return "Beer(id=" + this.getId() + ", manufacturer=" + this.getManufacturer() + ", name=" + this.getName() + ", category=" + this.getCategory() + ", photo=" + this.getPhoto() + ", avgRating=" + this.getAvgRating() + ", numRatings=" + this.getNumRatings() + ")";
     }
+
+    public float getMaxPrice() {
+        return maxPrice;
+    }
+
+    public float getMinPrice() {
+        return minPrice;
+    }
+
+    public int getNumPrices() {
+        return numPrices;
+    }
+
+    public void setMaxPrice(float maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public void setMinPrice(float minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public void setNumPrices(int numPrices) {
+        this.numPrices = numPrices;
+    }
 }
+
