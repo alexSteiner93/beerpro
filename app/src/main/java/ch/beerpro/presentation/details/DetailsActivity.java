@@ -1,18 +1,29 @@
 package ch.beerpro.presentation.details;
 
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -24,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +53,8 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     public static final String ITEM_ID = "item_id";
     private static final String TAG = "DetailsActivity";
+    public static final String NOTE = "Note";
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -77,9 +91,20 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.noteView)
+    CardView noteView;
+
+    @BindView(R.id.noteText)
+    EditText noteText;
+
+    @BindView(R.id.editNote)
+    Button editNote;
+
+
     private RatingsRecyclerViewAdapter adapter;
 
     private DetailsViewModel model;
+    private String beerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +134,11 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         model.getWish().observe(this, this::toggleWishlistView);
 
         recyclerView.setAdapter(adapter);
+        SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
+        editNote.setOnClickListener(getNoteListener());
+        changeVisibilityOfNoteField(settings);
+        updateNote(settings);
+
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
     }
 
@@ -126,6 +156,10 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(view);
         dialog.show();
+
+
+        View addPrivateNote = view.findViewById(R.id.addPrivateNote);
+        addPrivateNote.setOnClickListener(getNoteListener());
     }
 
     private void updateBeer(Beer item) {
@@ -162,6 +196,26 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         }
     }
 
+    private void showNoteDialog(Context context) {
+        SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
+        EditText noteText = new EditText(context);
+        noteText.setHint("Notiz");
+        noteText.setText(settings.getString(beerId, ""));
+        new AlertDialog.Builder(context)
+                .setTitle("Persönliche Notiz")
+                .setView(noteText)
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(beerId, noteText.getText().toString());
+                    editor.commit();
+
+                    changeVisibilityOfNoteField(settings);
+                    updateNote(settings);
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
     private void toggleWishlistView(Wish wish) {
         if (wish != null) {
             int color = getResources().getColor(R.color.colorPrimary);
@@ -183,5 +237,26 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    private View.OnClickListener getNoteListener() {
+        return view -> {
+            showNoteDialog(view.getContext());
+        };
+    }
+
+
+    private void changeVisibilityOfNoteField(SharedPreferences settings) {
+        if (settings.contains(beerId)) {
+            noteView.setVisibility(CardView.VISIBLE);
+        } else {
+            noteView.setVisibility(CardView.GONE);
+        }
+    }
+
+    private void updateNote(SharedPreferences settings) {
+        String note = settings.getString(beerId, "");
+        noteText.setText(note);
     }
 }

@@ -1,4 +1,3 @@
-
 package ch.beerpro.presentation.details;
 
 import androidx.lifecycle.LiveData;

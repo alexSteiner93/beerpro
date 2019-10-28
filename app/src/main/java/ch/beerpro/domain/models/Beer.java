@@ -18,6 +18,8 @@ public class Beer implements Entity, Serializable {
     private String photo;
     private float avgRating;
     private int numRatings;
+    private float avgPrice;
+
 
     public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings) {
         this.id = id;
@@ -29,11 +31,28 @@ public class Beer implements Entity, Serializable {
         this.numRatings = numRatings;
     }
 
+
+    public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings, float avgPrice) {
+        this.id = id;
+        this.manufacturer = manufacturer;
+        this.name = name;
+        this.category = category;
+        this.photo = photo;
+        this.avgRating = avgRating;
+        this.numRatings = numRatings;
+        this.avgPrice = avgPrice;
+    }
+
+
     public Beer() {
     }
 
     public String getId() {
         return this.id;
+    }
+
+    public float getAvgPrice() {
+        return avgPrice;
     }
 
     public String getManufacturer() {
@@ -70,6 +89,14 @@ public class Beer implements Entity, Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setAvgPrice(float avgPrice) {
+        this.avgPrice = avgPrice;
+    }
+
+    public void setAvgRating(float avgRating) {
+        this.avgRating = avgRating;
     }
 
     public void setCategory(String category) {

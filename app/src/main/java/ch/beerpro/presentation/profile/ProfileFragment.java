@@ -47,9 +47,6 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.myBeersCount)
     TextView myBeersCount;
 
-    @BindView(R.id.myFridgeCount)
-    TextView myFridgeCount;
-
     @BindView(R.id.myRatingsCount)
     TextView myRatingsCount;
 
@@ -108,6 +105,7 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), MyBeersActivity.class);
         startActivity(intent);
     }
+
 
     private void updateRatingsCount(List<Rating> ratings) {
         myRatingsCount.setText(String.valueOf(ratings.size()));

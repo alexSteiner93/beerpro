@@ -1,4 +1,3 @@
-
 package ch.beerpro.data.repositories;
 
 import androidx.arch.core.util.Function;
