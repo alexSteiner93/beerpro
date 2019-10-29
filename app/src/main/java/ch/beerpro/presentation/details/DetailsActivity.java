@@ -141,7 +141,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
         editNote.setOnClickListener(getNoteListener());
-        changeVisibilitNote(settings);
+        changeVisibilityNote(settings);
 
         updateNote(settings);
     }
@@ -191,7 +191,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         toolbar.setTitle(item.getName());
         if (item.getNumPrices() == 0) { avgPrice.setText("Kein Preis Vorhanden");}
         else {
-            avgPrice.setText("Preis: " + item.getMinimunPrice() + " - " + item.getMaximumPrice() +
+            avgPrice.setText("Preis: " + item.getMinimumPrice() + " - " + item.getMaximumPrice() +
                     ", Average: " + item.getAvgPrice() + " aus " + item.getNumPrices());
         }
     }
@@ -285,7 +285,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     }
 
 
-    private void changeVisibilitNote(SharedPreferences settings) {
+    private void changeVisibilityNote(SharedPreferences settings) {
         if (!settings.contains(itemid)) {
             noteView.setVisibility(CardView.GONE);
         } else {
@@ -307,7 +307,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
                     editor.putString(itemid, noteText.getText().toString());
                     editor.commit();
 
-                    changeVisibilitNote(settings);
+                    changeVisibilityNote(settings);
                     updateNote(settings);
                 })
                 .setNegativeButton(android.R.string.no, null)

@@ -13,7 +13,7 @@ public class Beer implements Entity, Serializable {
     public static final String FIELD_AVGPRICE = "avgPrice";
     public static final String FIELD_NUMPRICES = "numPrices";
     public static final String FIELD_MAXPRICE = "maximumPrice";
-    public static final String FIELD_MINPRICE = "minimunPrice";
+    public static final String FIELD_MINPRICE = "minimumPrice";
 
 
 
@@ -27,7 +27,7 @@ public class Beer implements Entity, Serializable {
     private int numRatings;
     private float avgPrice;
     private int numPrices;
-    private float minimunPrice;
+    private float minimumPrice;
     private float maximumPrice;
 
 
@@ -55,7 +55,7 @@ public class Beer implements Entity, Serializable {
     }
 
     public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings,
-                float avgPrice, int numPrices, float minimunPrice, float maximumPrice) {
+                float avgPrice, int numPrices, float minimumPrice, float maximumPrice) {
         this.id = id;
         this.manufacturer = manufacturer;
         this.name = name;
@@ -65,7 +65,7 @@ public class Beer implements Entity, Serializable {
         this.numRatings = numRatings;
         this.avgPrice = avgPrice;
         this.numPrices = numPrices;
-        this.minimunPrice = minimunPrice;
+        this.minimumPrice = minimumPrice;
         this.maximumPrice = maximumPrice;
     }
 
@@ -195,8 +195,8 @@ public class Beer implements Entity, Serializable {
         return maximumPrice;
     }
 
-    public float getMinimunPrice() {
-        return minimunPrice;
+    public float getMinimumPrice() {
+        return minimumPrice;
     }
 
     public int getNumPrices() {
@@ -207,8 +207,8 @@ public class Beer implements Entity, Serializable {
         this.maximumPrice = maximumPrice;
     }
 
-    public void setMinimunPrice(float minimunPrice) {
-        this.minimunPrice = minimunPrice;
+    public void setMinimumPrice(float minimumPrice) {
+        this.minimumPrice = minimumPrice;
     }
 
     public void setNumPrices(int numPrices) {

@@ -73,7 +73,7 @@ public class BeersRepository {
         document.update(Beer.FIELD_AVGPRICE,beer.getAvgPrice());
         document.update(Beer.FIELD_NUMPRICES,beer.getNumPrices());
         document.update(Beer.FIELD_MAXPRICE,beer.getMaximumPrice());
-        document.update(Beer.FIELD_MINPRICE,beer.getMinimunPrice());
+        document.update(Beer.FIELD_MINPRICE,beer.getMinimumPrice());
     }
 
 }

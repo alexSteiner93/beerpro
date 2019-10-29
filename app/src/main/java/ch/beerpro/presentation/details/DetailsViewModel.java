@@ -79,7 +79,7 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
         if (numPrices == 0) {
             b.setAvgPrice(inputPrice);
             b.setNumPrices(1);
-            b.setMinimunPrice(inputPrice);
+            b.setMinimumPrice(inputPrice);
             b.setMaximumPrice(inputPrice);
         }
         else {
@@ -89,7 +89,7 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
             b.setNumPrices(numPrices + 1);
 
             if(b.getMaximumPrice()<inputPrice) {b.setMaximumPrice(inputPrice);}
-            if(b.getMinimunPrice()>inputPrice) {b.setMinimunPrice(inputPrice);}
+            if(b.getMinimumPrice()>inputPrice) {b.setMinimumPrice(inputPrice);}
         }
 
         BeersRepository.updatePrice(b);
