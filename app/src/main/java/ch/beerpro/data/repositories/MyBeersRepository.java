@@ -2,8 +2,6 @@ package ch.beerpro.data.repositories;
 
 import androidx.lifecycle.LiveData;
 
-import org.apache.commons.lang3.tuple.Triple;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,9 +23,6 @@ import static androidx.lifecycle.Transformations.map;
 import static ch.beerpro.domain.utils.LiveDataExtensions.combineLatest;
 
 public class MyBeersRepository {
-
-
-    Triple<Object, Object, Object> test;
 
     private static List<MyBeer> getMyBeers(Quadruple<List<Wish>, List<Rating>, List<FridgeBeer>, HashMap<String, Beer>> input) {
         List<Wish> wishlist = input.getFirst();

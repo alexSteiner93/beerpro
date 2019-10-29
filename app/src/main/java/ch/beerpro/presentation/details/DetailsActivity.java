@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.fragment.app.DialogFragment;
 
@@ -163,12 +164,14 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         });
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(view);
-        dialog.show();
-/*
-        view.findViewById(R.id.addToFridge).setOnClickListener((x) -> {
-            model.addBeerToFridge(x);
+        Button addToFridge = dialog.findViewById(R.id.addToFridge);
+        addToFridge.setOnClickListener(v -> {
+            onFridgeClickedListener(v);
+            Toast toast = Toast.makeText(DetailsActivity.this, "Das Bier wurde zum Kühlschrank hinzugefügt.", Toast.LENGTH_SHORT);
+            toast.show();
             dialog.dismiss();
-        });*/
+        });
+        dialog.show();
 
         View addPrivateNote = view.findViewById(R.id.addPrivateNote);
         addPrivateNote.setOnClickListener(getNoteListener());

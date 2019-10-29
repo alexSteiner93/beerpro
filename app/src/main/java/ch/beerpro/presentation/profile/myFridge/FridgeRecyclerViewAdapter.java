@@ -31,7 +31,7 @@ import ch.beerpro.presentation.utils.EntityPairDiffItemCallback;
 
 public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer>, FridgeRecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "FridgelistRecyclerViewAda";
+    private static final String TAG = "FridgeRecyclerViewAda";
 
     private static final DiffUtil.ItemCallback<Pair<FridgeBeer, Beer>> DIFF_CALLBACK = new EntityPairDiffItemCallback<>();
 
@@ -101,12 +101,12 @@ public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer
             ratingBar.setRating(item.getAvgRating());
             numRatings.setText(itemView.getResources().getString(R.string.fmt_num_ratings, item.getNumRatings()));
             itemView.setOnClickListener(v -> listener.onMoreClickedListener(photo, item));
-            String suffix = "Bier";
+            String unit = "Bier";
 
             if (fridgeBeer.getAmount() >= 1) {
-                suffix = "Biere";
+                unit = "Biere";
             }
-            amount.setText(String.format(Locale.GERMAN, "%d %s", fridgeBeer.getAmount(), suffix));
+            amount.setText(String.format(Locale.GERMAN, "%d %s", fridgeBeer.getAmount(), unit));
             addToFridge.setOnClickListener(v -> listener.onFridgeAddClickedListener(fridgeBeer));
             removeFromFridge.setOnClickListener(v -> listener.onFridgeRemoveClickedListener(fridgeBeer));
         }
