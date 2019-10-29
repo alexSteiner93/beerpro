@@ -23,7 +23,7 @@ public class PriceFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(R.layout.fragment_price);
-        builder.setMessage("Gib deinen Preis an")
+        builder.setMessage("Füge deinen Preis ein")
                 .setPositiveButton("Ok", (dialog, id) -> {
                     EditText et = getDialog().findViewById(R.id.PriceInput);
                     float price = Float.parseFloat(et.getText().toString());

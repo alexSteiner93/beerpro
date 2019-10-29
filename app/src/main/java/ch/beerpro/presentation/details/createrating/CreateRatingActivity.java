@@ -1,4 +1,5 @@
 package ch.beerpro.presentation.details.createrating;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -207,7 +208,11 @@ public class CreateRatingActivity extends AppCompatActivity {
                 saveRating();
                 return true;
             case android.R.id.home:
-                onBackPressed();
+                if (getParentActivityIntent() == null) {
+                    onBackPressed();
+                } else {
+                    NavUtils.navigateUpFromSameTask(this);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
