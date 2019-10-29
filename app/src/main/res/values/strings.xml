@@ -105,4 +105,8 @@
     <string name="action_search">Bier suchen</string>
     <string name="title_activity_my_fridge">Kühlschrank</string>
     <string name="title_activity_notice">Private Notizen</string>
+    <string name="removeString">Entfernen</string>
+    <string name="addString">Hinzufügen</string>
+    <string name="fridgeItemCount">Anzahl im Kühlschrank</string>
+    <string name="title_activity_fridge">Mein Kühlschrank</string>
 </resources>

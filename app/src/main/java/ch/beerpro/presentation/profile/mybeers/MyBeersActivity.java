@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.details.DetailsActivity;
 
 public class MyBeersActivity extends AppCompatActivity implements OnMyBeerItemInteractionListener {
@@ -86,5 +87,20 @@ public class MyBeersActivity extends AppCompatActivity implements OnMyBeerItemIn
     @Override
     public void onWishClickedListener(Beer item) {
         model.toggleItemInWishlist(item.getId());
+    }
+
+    @Override
+    public void onAddNewClickedListener(Beer item) {
+        model.addToFridge(item);
+    }
+
+    @Override
+    public void onFridgeAddClickedListener(FridgeBeer fridgeBeer) {
+        model.addToFridge(fridgeBeer);
+    }
+
+    @Override
+    public void onFridgeRemoveClickedListener(FridgeBeer fridgeBeer) {
+        model.removeFromFridge(fridgeBeer);
     }
 }

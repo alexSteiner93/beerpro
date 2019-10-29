@@ -252,6 +252,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         model.updateBeerPrice(priceInput);
     }
 
+    public void onFridgeClickedListener(View view) {
+        model.addToFridge(model.getBeer().getValue().getId());
+    }
 
     @OnClick(R.id.shareButton)
     public void onShareBeerClickedListener(View view) {

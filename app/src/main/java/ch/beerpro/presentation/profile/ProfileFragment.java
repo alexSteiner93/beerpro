@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment {
         model.getMyWishlist().observe(this, this::updateWishlistCount);
         model.getMyRatings().observe(this, this::updateRatingsCount);
         model.getMyBeers().observe(this, this::updateMyBeersCount);
-        model.getMyFridge().observe(this, this::updateFridgeCount);
+        model.getMyFridge().observe(this, this::updateMyFridgeCount);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment {
         myBeersCount.setText(String.valueOf(myBeers.size()));
     }
 
-    private void updateFridgeCount(List<FridgeBeer> o) {
+    private void updateMyFridgeCount(List<FridgeBeer> o) {
         int sum = 0;
         for (FridgeBeer f : o) {
             sum += Integer.valueOf(f.getAmount());
@@ -122,11 +122,10 @@ public class ProfileFragment extends Fragment {
     }
 
     @OnClick(R.id.myFridge)
-    public void handleMyFridgeCount(View v) {
+    public void handleMyFridgeClick(View view) {
         Intent intent = new Intent(getActivity(), MyFridgeActivity.class);
         startActivity(intent);
     }
-
 
     private void updateRatingsCount(List<Rating> ratings) {
         myRatingsCount.setText(String.valueOf(ratings.size()));

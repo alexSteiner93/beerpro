@@ -77,7 +77,7 @@ public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer
         TextView numRatings;
 
         @BindView(R.id.amount)
-        EditText amount;
+        TextView amount;
 
         @BindView(R.id.addToFridge)
         Button addToFridge;
@@ -90,7 +90,7 @@ public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(FridgeBeer fridgeBeer, Beer item, OnFridgeItemInteractionListener listener) {
+        public void bind(FridgeBeer fridgeBeer, Beer item, OnFridgeItemInteractionListener listener) {
             name.setText(item.getName());
             manufacturer.setText(item.getManufacturer());
             category.setText(item.getCategory());
@@ -101,7 +101,6 @@ public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer
             ratingBar.setRating(item.getAvgRating());
             numRatings.setText(itemView.getResources().getString(R.string.fmt_num_ratings, item.getNumRatings()));
             itemView.setOnClickListener(v -> listener.onMoreClickedListener(photo, item));
-
             String suffix = "Bier";
 
             if (fridgeBeer.getAmount() >= 1) {

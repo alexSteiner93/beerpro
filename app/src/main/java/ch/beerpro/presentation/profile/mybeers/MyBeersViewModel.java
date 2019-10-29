@@ -86,4 +86,16 @@ public class MyBeersViewModel extends ViewModel implements CurrentUser {
     public void setSearchTerm(String searchTerm) {
         this.searchTerm.setValue(searchTerm);
     }
+
+    public void addToFridge(FridgeBeer fridgeBeer) {
+        fridgeRepository.addFridgeBeer(getCurrentUser().getUid(), fridgeBeer.getBeerId());
+    }
+
+    public void removeFromFridge(FridgeBeer fridgeBeer) {
+        fridgeRepository.removeFridgeBeer(getCurrentUser().getUid(), fridgeBeer.getBeerId());
+    }
+
+    public void addToFridge(Beer item) {
+        fridgeRepository.addFridgeBeer(getCurrentUser().getUid(), item.getId());
+    }
 }
