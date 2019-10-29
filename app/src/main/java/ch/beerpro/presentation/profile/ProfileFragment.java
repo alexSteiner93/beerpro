@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ch.beerpro.domain.models.FridgeBeer;
-import ch.beerpro.presentation.profile.myFridge.MyFridgeActivity;
+import ch.beerpro.presentation.profile.myfridge.FridgeActivity;
 import java.util.List;
 
 import butterknife.BindView;
@@ -123,7 +123,7 @@ public class ProfileFragment extends Fragment {
 
     @OnClick(R.id.myFridge)
     public void handleMyFridgeClick(View view) {
-        Intent intent = new Intent(getActivity(), MyFridgeActivity.class);
+        Intent intent = new Intent(getActivity(), FridgeActivity.class);
         startActivity(intent);
     }
 

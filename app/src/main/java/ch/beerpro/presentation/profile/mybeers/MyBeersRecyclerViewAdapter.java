@@ -9,7 +9,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +34,7 @@ import ch.beerpro.presentation.utils.DrawableHelpers;
 
 public class MyBeersRecyclerViewAdapter extends ListAdapter<MyBeer, MyBeersRecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "MyBeersRecyclerViewAdap";
+    private static final String TAG = "MyBeersRecyclerViewAdapter";
 
     private static final DiffUtil.ItemCallback<MyBeer> DIFF_CALLBACK = new DiffUtil.ItemCallback<MyBeer>() {
         @Override
@@ -150,6 +149,11 @@ public class MyBeersRecyclerViewAdapter extends ListAdapter<MyBeer, MyBeersRecyc
                 DrawableHelpers
                         .setDrawableTint(removeFromWishlist, itemView.getResources().getColor(R.color.colorPrimary));
                 onTheListSince.setText("auf der Wunschliste seit");
+            } else if (entry instanceof MyBeerFromFridge) {
+                DrawableHelpers.setDrawableTint(removeFromWishlist,
+                        itemView.getResources().getColor(android.R.color.darker_gray));
+                removeFromWishlist.setText("Wunschliste");
+                onTheListSince.setText("zuletzt im Kühlschrank bearbeitet");
             } else if (entry instanceof MyBeerFromRating) {
                 DrawableHelpers.setDrawableTint(removeFromWishlist,
                         itemView.getResources().getColor(android.R.color.darker_gray));

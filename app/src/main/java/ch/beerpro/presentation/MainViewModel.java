@@ -30,11 +30,11 @@ public class MainViewModel extends ViewModel implements CurrentUser {
 
     private static final String TAG = "MainViewModel";
 
-    private final FridgeRepository fridgeRepository;
     private final BeersRepository beersRepository;
     private final LikesRepository likesRepository;
     private final RatingsRepository ratingsRepository;
     private final WishlistRepository wishlistRepository;
+    private final FridgeRepository fridgeRepository;
 
     private final LiveData<List<Wish>> myWishlist;
     private final LiveData<List<Rating>> myRatings;

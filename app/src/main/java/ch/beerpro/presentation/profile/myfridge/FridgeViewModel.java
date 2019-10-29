@@ -1,4 +1,4 @@
-package ch.beerpro.presentation.profile.myFridge;
+package ch.beerpro.presentation.profile.myfridge;
 
 import android.util.Pair;
 
@@ -15,7 +15,7 @@ import ch.beerpro.domain.models.FridgeBeer;
 
 public class FridgeViewModel extends ViewModel implements CurrentUser {
 
-    private static final String TAG = "FridgelistViewModel";
+    private static final String TAG = "FridgeViewModel";
 
     private final MutableLiveData<String> currentUserId = new MutableLiveData<>();
     private final FridgeRepository fridgeRepository;

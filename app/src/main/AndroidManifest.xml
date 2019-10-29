@@ -77,7 +77,7 @@
                 android:value=".presentation.MainActivity" />
         </activity>
         <activity
-            android:name=".presentation.profile.myFridge.MyFridgeActivity"
+            android:name=".presentation.profile.myfridge.FridgeActivity"
             android:label="@string/title_activity_fridge"
             android:parentActivityName=".presentation.MainActivity"
             android:theme="@style/AppTheme">

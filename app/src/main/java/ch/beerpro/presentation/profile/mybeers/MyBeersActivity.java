@@ -18,8 +18,9 @@ import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.details.DetailsActivity;
+import ch.beerpro.presentation.profile.myfridge.OnFridgeItemInteractionListener;
 
-public class MyBeersActivity extends AppCompatActivity implements OnMyBeerItemInteractionListener {
+public class MyBeersActivity extends AppCompatActivity implements OnMyBeerItemInteractionListener, OnFridgeItemInteractionListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

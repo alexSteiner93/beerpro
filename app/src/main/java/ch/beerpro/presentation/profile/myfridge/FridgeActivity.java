@@ -1,4 +1,4 @@
-package ch.beerpro.presentation.profile.myFridge;
+package ch.beerpro.presentation.profile.myfridge;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -23,7 +23,7 @@ import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.details.DetailsActivity;
 
-public class MyFridgeActivity extends AppCompatActivity implements OnFridgeItemInteractionListener {
+public class FridgeActivity extends AppCompatActivity implements OnFridgeItemInteractionListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

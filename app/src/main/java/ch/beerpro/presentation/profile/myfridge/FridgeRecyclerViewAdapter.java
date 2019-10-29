@@ -1,5 +1,4 @@
-
-package ch.beerpro.presentation.profile.myFridge;
+package ch.beerpro.presentation.profile.myfridge;
 
 import android.util.Pair;
 import android.view.LayoutInflater;
