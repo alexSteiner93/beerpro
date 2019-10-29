@@ -18,6 +18,7 @@ import ch.beerpro.domain.models.MyBeerFromWishlist;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
 import ch.beerpro.domain.models.MyBeerFromFridge;
+import ch.beerpro.domain.utils.Quadruple;
 
 import static androidx.lifecycle.Transformations.map;
 import static ch.beerpro.domain.utils.LiveDataExtensions.combineLatest;
@@ -34,8 +35,10 @@ public class MyBeersRepository {
         Set<String> beersAlreadyOnTheList = new HashSet<>();
         for (Wish wish : wishlist) {
             String beerId = wish.getBeerId();
-            result.add(new MyBeerFromWishlist(wish, beers.get(beerId)));
-            beersAlreadyOnTheList.add(beerId);
+            if (beersAlreadyOnTheList.contains(beerId)) {
+                result.add(new MyBeerFromWishlist(wish, beers.get(beerId)));
+                beersAlreadyOnTheList.add(beerId);
+            }
         }
 
         for (Rating rating : ratings) {
@@ -46,10 +49,10 @@ public class MyBeersRepository {
             }
         }
 
-        for (FridgeBeer f : fridgeBeers) {
-            String beerId = f.getBeerId();
+        for (FridgeBeer fridgeBeer : fridgeBeers) {
+            String beerId = fridgeBeer.getBeerId();
             if (!beersAlreadyOnTheList.contains(beerId)) {
-                result.add(new MyBeerFromFridge(f, beers.get(beerId)));
+                result.add(new MyBeerFromFridge(fridgeBeer, beers.get(beerId)));
                 beersAlreadyOnTheList.add(beerId);
             }
         }

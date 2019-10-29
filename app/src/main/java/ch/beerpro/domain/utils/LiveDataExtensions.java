@@ -7,8 +7,6 @@ import androidx.lifecycle.MediatorLiveData;
 
 import org.apache.commons.lang3.tuple.Triple;
 
-import ch.beerpro.data.repositories.Quadruple;
-
 public class LiveDataExtensions {
 
     public static <A, B> LiveData<Pair<A, B>> zip(LiveData<A> as, LiveData<B> bs) {
@@ -126,7 +124,7 @@ public class LiveDataExtensions {
 
             private void update() {
                 if (lastA != null && lastB != null && lastC != null && lastD != null) {
-                    this.setValue(new Quadruple<>(lastA, lastB, lastC, lastD));
+                    this.setValue(new Quadruple<A, B, C, D>(lastA, lastB, lastC, lastD));
                 }
             }
         };

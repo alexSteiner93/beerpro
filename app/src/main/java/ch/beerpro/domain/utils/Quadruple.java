@@ -1,11 +1,11 @@
-package ch.beerpro.data.repositories;
+package ch.beerpro.domain.utils;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
-public class Quadruple<T1, T2, T3, T4> implements Comparable<Quadruple<T1, T2, T3, T4>>, Serializable {
+public class Quadruple<T1, T2, T3, T4> extends Object implements Comparable<Quadruple<T1, T2, T3, T4>>, Serializable {
     private T1 first;
     private T2 second;
     private T3 third;
