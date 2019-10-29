@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.profile.myFridge.MyFridgeActivity;
 import java.util.List;
 
@@ -31,8 +32,6 @@ import ch.beerpro.presentation.MainViewModel;
 import ch.beerpro.presentation.profile.mybeers.MyBeersActivity;
 import ch.beerpro.presentation.profile.myratings.MyRatingsActivity;
 import ch.beerpro.presentation.profile.mywishlist.WishlistActivity;
-
-import ch.beerpro.domain.models.Fridge;
 
 
 /**
@@ -96,9 +95,9 @@ public class ProfileFragment extends Fragment {
         myBeersCount.setText(String.valueOf(myBeers.size()));
     }
 
-    private void updateFridgeCount(List<Fridge> o) {
+    private void updateFridgeCount(List<FridgeBeer> o) {
         int sum = 0;
-        for (Fridge f : o) {
+        for (FridgeBeer f : o) {
             sum += Integer.valueOf(f.getAmount());
         }
         myFridgeCount.setText(String.valueOf(sum));

@@ -17,24 +17,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.GlideApp;
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.Fridge;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.utils.EntityPairDiffItemCallback;
 
 
-public class FridgelistRecyclerViewAdapter extends ListAdapter<Pair<Fridge, Beer>, FridgelistRecyclerViewAdapter.ViewHolder> {
+public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer>, FridgeRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "FridgelistRecyclerViewAda";
 
-    private static final DiffUtil.ItemCallback<Pair<Fridge, Beer>> DIFF_CALLBACK = new EntityPairDiffItemCallback<>();
+    private static final DiffUtil.ItemCallback<Pair<FridgeBeer, Beer>> DIFF_CALLBACK = new EntityPairDiffItemCallback<>();
 
-    private final OnFridgelistItemInteractionListener listener;
+    private final OnFridgeItemInteractionListener listener;
 
-    public FridgelistRecyclerViewAdapter(OnFridgelistItemInteractionListener listener) {
+    public FridgeRecyclerViewAdapter(OnFridgeItemInteractionListener listener) {
         super(DIFF_CALLBACK);
         this.listener = listener;
     }
@@ -49,7 +52,7 @@ public class FridgelistRecyclerViewAdapter extends ListAdapter<Pair<Fridge, Beer
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        Pair<Fridge, Beer> item = getItem(position);
+        Pair<FridgeBeer, Beer> item = getItem(position);
         holder.bind(item.first, item.second, listener);
     }
 
@@ -73,18 +76,21 @@ public class FridgelistRecyclerViewAdapter extends ListAdapter<Pair<Fridge, Beer
         @BindView(R.id.numRatings)
         TextView numRatings;
 
-        @BindView(R.id.menge)
+        @BindView(R.id.amount)
         EditText amount;
 
-        @BindView(R.id.save)
-        Button save;
+        @BindView(R.id.addToFridge)
+        Button addToFridge;
+
+        @BindView(R.id.removeFromFridge)
+        Button removeFromFridge;
 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(Fridge fridge, Beer item, OnFridgelistItemInteractionListener listener) {
+        void bind(FridgeBeer fridgeBeer, Beer item, OnFridgeItemInteractionListener listener) {
             name.setText(item.getName());
             manufacturer.setText(item.getManufacturer());
             category.setText(item.getCategory());
@@ -96,8 +102,14 @@ public class FridgelistRecyclerViewAdapter extends ListAdapter<Pair<Fridge, Beer
             numRatings.setText(itemView.getResources().getString(R.string.fmt_num_ratings, item.getNumRatings()));
             itemView.setOnClickListener(v -> listener.onMoreClickedListener(photo, item));
 
-            amount.setText(String.valueOf(fridge.getAmount()));
-            save.setOnClickListener(v -> listener.onSaveClickedListener(fridge, amount.getText().toString()));
+            String suffix = "Bier";
+
+            if (fridgeBeer.getAmount() >= 1) {
+                suffix = "Biere";
+            }
+            amount.setText(String.format(Locale.GERMAN, "%d %s", fridgeBeer.getAmount(), suffix));
+            addToFridge.setOnClickListener(v -> listener.onFridgeAddClickedListener(fridgeBeer));
+            removeFromFridge.setOnClickListener(v -> listener.onFridgeRemoveClickedListener(fridgeBeer));
         }
     }
 }
