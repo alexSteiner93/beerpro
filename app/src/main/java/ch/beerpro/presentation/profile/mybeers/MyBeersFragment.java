@@ -55,13 +55,11 @@ public class MyBeersFragment extends Fragment {
     }
 
     private void handleBeersChanged(List<MyBeer> beers) {
-        if (beers == null || beers.isEmpty()) {
-            adapter.submitList(new ArrayList<>());
+        adapter.submitList(new ArrayList<>(beers));
+        if (beers.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
-        }
-        else {
-            adapter.submitList(new ArrayList<>(beers));
+        } else {
             emptyView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
         }

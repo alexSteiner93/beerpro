@@ -2,20 +2,13 @@ package ch.beerpro.presentation.details.Price;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProviders;
 import ch.beerpro.R;
 import ch.beerpro.presentation.details.DetailsActivity;
-import ch.beerpro.presentation.details.DetailsViewModel;
 
 public class PriceFragment extends DialogFragment {
     @Override
