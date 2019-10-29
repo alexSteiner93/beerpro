@@ -1,11 +1,16 @@
 package ch.beerpro.data.repositories;
 
-public class Quadruple<T1, T2, T3, T4>  {
+import java.io.Serializable;
+import java.util.Objects;
+
+import org.apache.commons.lang3.builder.CompareToBuilder;
+
+public class Quadruple<T1, T2, T3, T4> implements Comparable<Quadruple<T1, T2, T3, T4>>, Serializable {
     private T1 first;
     private T2 second;
     private T3 third;
     private T4 fourth;
-    private static final long serialVersionUID = -1815154910139794476L;
+    private static final long serialVersionUID = 1L;
 
     public Quadruple() {
     }
@@ -50,36 +55,43 @@ public class Quadruple<T1, T2, T3, T4>  {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Quadruple)) return false;
+    public int compareTo(final Quadruple<T1, T2, T3, T4> other) {
+        return new CompareToBuilder().append(getFirst(), other.getFirst())
+                .append(getSecond(), other.getSecond())
+                .append(getThird(), other.getThird())
+                .append(getFourth(), other.getFourth())
+                .toComparison();
+    }
 
-        Quadruple quadruple = (Quadruple) o;
-
-        if (first != null ? !first.equals(quadruple.first) : quadruple.first != null) return false;
-        if (fourth != null ? !fourth.equals(quadruple.fourth) : quadruple.fourth != null) return false;
-        if (second != null ? !second.equals(quadruple.second) : quadruple.second != null) return false;
-        if (third != null ? !third.equals(quadruple.third) : quadruple.third != null) return false;
-
-        return true;
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof Quadruple<?, ?, ?, ?>) {
+            final Quadruple<?, ?, ?, ?> other = (Quadruple<?, ?, ?, ?>) o;
+            return Objects.equals(getFirst(), other.getFirst())
+                    && Objects.equals(getSecond(), other.getSecond())
+                    && Objects.equals(getThird(), other.getThird())
+                    && Objects.equals(getFourth(), other.getFourth());
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        int result = first != null ? first.hashCode() : 0;
-        result = 31 * result + (second != null ? second.hashCode() : 0);
-        result = 31 * result + (third != null ? third.hashCode() : 0);
-        result = 31 * result + (fourth != null ? fourth.hashCode() : 0);
-        return result;
+        return (getFirst() == null ? 0 : getFirst().hashCode()) ^
+                (getSecond() == null ? 0 : getSecond().hashCode()) ^
+                (getThird() == null ? 0 : getThird().hashCode()) ^
+                (getFourth() == null ? 0 : getFourth().hashCode());
     }
 
     @Override
     public String toString() {
-        return "Quadruple{" +
-                "first=" + first +
-                ", second=" + second +
-                ", third=" + third +
-                ", fourth=" + fourth +
-                '}';
+        return "(" + getFirst() + "," + getSecond() + "," + getThird() + "," + getFourth() + ")";
+    }
+
+    public String toString(final String format) {
+        return String.format(format, getFirst(), getSecond(), getThird(), getFourth());
     }
 }

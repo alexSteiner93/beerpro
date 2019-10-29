@@ -9,6 +9,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,13 +18,16 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.text.DateFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.GlideApp;
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
+import ch.beerpro.domain.models.MyBeerFromFridge;
 import ch.beerpro.domain.models.MyBeerFromRating;
 import ch.beerpro.domain.models.MyBeerFromWishlist;
 import ch.beerpro.presentation.utils.DrawableHelpers;
@@ -97,6 +101,15 @@ public class MyBeersRecyclerViewAdapter extends ListAdapter<MyBeer, MyBeersRecyc
         @BindView(R.id.removeFromWishlist)
         Button removeFromWishlist;
 
+        @BindView(R.id.addToFridge)
+        Button addToFridge;
+
+        @BindView(R.id.removeFromFridge)
+        Button removeFromFridge;
+
+        @BindView(R.id.amount)
+        TextView amount;
+
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, itemView);
@@ -121,6 +134,17 @@ public class MyBeersRecyclerViewAdapter extends ListAdapter<MyBeer, MyBeersRecyc
             String formattedDate =
                     DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(entry.getDate());
             addedAt.setText(formattedDate);
+
+            if (entry.getFridgeBeer() != null) {
+                FridgeBeer fridgeBeer = entry.getFridgeBeer();
+                addToFridge.setOnClickListener(v -> listener.onFridgeAddClickedListener(fridgeBeer));
+                removeFromFridge.setOnClickListener(v -> listener.onFridgeRemoveClickedListener(fridgeBeer));
+                amount.setText(String.format(Locale.GERMAN, "%d %s", fridgeBeer.getAmount(), "Biere"));
+            } else {
+                addToFridge.setOnClickListener(v -> listener.onAddNewClickedListener(item));
+                removeFromFridge.setVisibility(View.INVISIBLE);
+                amount.setText("0 Biere");
+            }
 
             if (entry instanceof MyBeerFromWishlist) {
                 DrawableHelpers

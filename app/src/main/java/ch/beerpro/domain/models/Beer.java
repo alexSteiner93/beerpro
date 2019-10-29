@@ -16,6 +16,7 @@ public class Beer implements Entity, Serializable {
     public static final String FIELD_MINPRICE = "minimunPrice";
 
 
+
     @Exclude
     private String id;
     private String manufacturer;

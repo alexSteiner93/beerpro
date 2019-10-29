@@ -95,7 +95,7 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
         BeersRepository.updatePrice(b);
     }
 
-    public void addBeerToFridge(View v) {
-        fridgeRepository.addOrIncrementBeer(beer.getValue(), getCurrentUser().getUid());
+    public void addToFridge(String beerId) {
+        fridgeRepository.addFridgeBeer(getCurrentUser().getUid(), beerId);
     }
 }

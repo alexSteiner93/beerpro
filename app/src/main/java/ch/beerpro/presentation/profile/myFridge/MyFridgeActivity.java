@@ -8,28 +8,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.Fridge;
-import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.details.DetailsActivity;
-import ch.beerpro.presentation.profile.mywishlist.OnWishlistItemInteractionListener;
-import ch.beerpro.presentation.profile.mywishlist.WishlistRecyclerViewAdapter;
-import ch.beerpro.presentation.profile.mywishlist.WishlistViewModel;
 
-
-import java.util.List;
-
-public class MyFridgeActivity extends AppCompatActivity implements OnFridgelistItemInteractionListener {
+public class MyFridgeActivity extends AppCompatActivity implements OnFridgeItemInteractionListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -40,8 +34,8 @@ public class MyFridgeActivity extends AppCompatActivity implements OnFridgelistI
     @BindView(R.id.emptyView)
     View emptyView;
 
-    private FridgelistViewModel model;
-    private FridgelistRecyclerViewAdapter adapter;
+    private FridgeViewModel model;
+    private FridgeRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,31 +44,30 @@ public class MyFridgeActivity extends AppCompatActivity implements OnFridgelistI
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Kühlschrank");
+        getSupportActionBar().setTitle(getString(R.string.title_activity_fridge));
 
-        model = ViewModelProviders.of(this).get(FridgelistViewModel.class);
-        model.getContentWithBeer().observe(this, this::updateFridgelist);
+
+        model = ViewModelProviders.of(this).get(FridgeViewModel.class);
+        model.getMyFridgeWithBeers().observe(this, this::updateFridge);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new FridgelistRecyclerViewAdapter(this);
+        adapter = new FridgeRecyclerViewAdapter(this);
 
         recyclerView.setAdapter(adapter);
 
     }
-
-    private void updateFridgelist(List<Pair<Fridge, Beer>> entries) {
+    private void updateFridge(List<Pair<FridgeBeer, Beer>> entries) {
         adapter.submitList(entries);
         if (entries.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.INVISIBLE);
         } else {
-            emptyView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -96,8 +89,12 @@ public class MyFridgeActivity extends AppCompatActivity implements OnFridgelistI
     }
 
     @Override
-    public void onSaveClickedListener(Fridge fridge, String amount) {
-        model.updateAmountBeer(fridge, amount);
-        recyclerView.getAdapter().notifyDataSetChanged();
+    public void onFridgeAddClickedListener(FridgeBeer fridgeBeer) {
+        model.addToFridge(fridgeBeer);
+    }
+
+    @Override
+    public void onFridgeRemoveClickedListener(FridgeBeer fridgeBeer) {
+        model.removeFromFridge(fridgeBeer);
     }
 }

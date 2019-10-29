@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.profile.myFridge.MyFridgeActivity;
 import java.util.List;
 
@@ -31,8 +32,6 @@ import ch.beerpro.presentation.MainViewModel;
 import ch.beerpro.presentation.profile.mybeers.MyBeersActivity;
 import ch.beerpro.presentation.profile.myratings.MyRatingsActivity;
 import ch.beerpro.presentation.profile.mywishlist.WishlistActivity;
-
-import ch.beerpro.domain.models.Fridge;
 
 
 /**
@@ -77,7 +76,7 @@ public class ProfileFragment extends Fragment {
         model.getMyWishlist().observe(this, this::updateWishlistCount);
         model.getMyRatings().observe(this, this::updateRatingsCount);
         model.getMyBeers().observe(this, this::updateMyBeersCount);
-        model.getMyFridge().observe(this, this::updateFridgeCount);
+        model.getMyFridge().observe(this, this::updateMyFridgeCount);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -96,9 +95,9 @@ public class ProfileFragment extends Fragment {
         myBeersCount.setText(String.valueOf(myBeers.size()));
     }
 
-    private void updateFridgeCount(List<Fridge> o) {
+    private void updateMyFridgeCount(List<FridgeBeer> o) {
         int sum = 0;
-        for (Fridge f : o) {
+        for (FridgeBeer f : o) {
             sum += Integer.valueOf(f.getAmount());
         }
         myFridgeCount.setText(String.valueOf(sum));
@@ -123,11 +122,10 @@ public class ProfileFragment extends Fragment {
     }
 
     @OnClick(R.id.myFridge)
-    public void handleMyFridgeCount(View v) {
+    public void handleMyFridgeClick(View view) {
         Intent intent = new Intent(getActivity(), MyFridgeActivity.class);
         startActivity(intent);
     }
-
 
     private void updateRatingsCount(List<Rating> ratings) {
         myRatingsCount.setText(String.valueOf(ratings.size()));

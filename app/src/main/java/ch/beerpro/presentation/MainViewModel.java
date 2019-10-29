@@ -18,7 +18,7 @@ import ch.beerpro.data.repositories.MyBeersRepository;
 import ch.beerpro.data.repositories.RatingsRepository;
 import ch.beerpro.data.repositories.WishlistRepository;
 import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.Fridge;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
@@ -39,7 +39,7 @@ public class MainViewModel extends ViewModel implements CurrentUser {
     private final LiveData<List<Wish>> myWishlist;
     private final LiveData<List<Rating>> myRatings;
     private final LiveData<List<MyBeer>> myBeers;
-    private final LiveData<List<Fridge>> myfridge;
+    private final LiveData<List<FridgeBeer>> myFridge;
 
     public MainViewModel() {
         /*
@@ -57,8 +57,8 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         MutableLiveData<String> currentUserId = new MutableLiveData<>();
         myWishlist = wishlistRepository.getMyWishlist(currentUserId);
         myRatings = ratingsRepository.getMyRatings(currentUserId);
-        myfridge = fridgeRepository.getMyFridge(currentUserId);
-        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings);
+        myFridge = fridgeRepository.getMyFridgeBeers(currentUserId);
+        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myFridge);
 
         /*
          * Set the current user id, which is used as input for the getMyWishlist and getMyRatings calls above.
@@ -78,8 +78,8 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         return myRatings;
     }
 
-    public LiveData<List<Fridge>> getMyFridge() {
-        return myfridge;
+    public LiveData<List<FridgeBeer>> getMyFridge() {
+        return myFridge;
     }
 
     public LiveData<List<Wish>> getMyWishlist() {
