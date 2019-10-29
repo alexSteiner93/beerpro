@@ -79,8 +79,8 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
         if (numPrices == 0) {
             b.setAvgPrice(inputPrice);
             b.setNumPrices(1);
-            b.setMinPrice(inputPrice);
-            b.setMaxPrice(inputPrice);
+            b.setMinimunPrice(inputPrice);
+            b.setMaximumPrice(inputPrice);
         }
         else {
             float newPrice = averagePrice * ((float)numPrices / (numPrices + 1f));
@@ -88,8 +88,8 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
             b.setAvgPrice(newPrice);
             b.setNumPrices(numPrices + 1);
 
-            if(b.getMaxPrice()<inputPrice) {b.setMaxPrice(inputPrice);}
-            if(b.getMinPrice()>inputPrice) {b.setMinPrice(inputPrice);}
+            if(b.getMaximumPrice()<inputPrice) {b.setMaximumPrice(inputPrice);}
+            if(b.getMinimunPrice()>inputPrice) {b.setMinimunPrice(inputPrice);}
         }
 
         BeersRepository.updatePrice(b);

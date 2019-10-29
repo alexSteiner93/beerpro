@@ -5,10 +5,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
+
 import ch.beerpro.presentation.details.Price.PriceFragment;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,11 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.fragment.app.DialogFragment;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -37,7 +34,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -142,11 +138,11 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         recyclerView.setAdapter(adapter);
         SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
-        editNote.setOnClickListener(getNoteListener());
-        changeVisibilityOfNoteField(settings);
-        updateNote(settings);
-
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
+        editNote.setOnClickListener(getNoteListener());
+        changeVisibilitNote(settings);
+
+        updateNote(settings);
     }
 
     private void addNewRating(RatingBar ratingBar, float v, boolean b) {
@@ -192,8 +188,8 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         toolbar.setTitle(item.getName());
         if (item.getNumPrices() == 0) { avgPrice.setText("Kein Preis Vorhanden");}
         else {
-            avgPrice.setText("Preis(CHF): " + item.getMinPrice() + " - " + item.getMaxPrice() +
-                    ", Durchschnitt: " + item.getAvgPrice() + " aus " + item.getNumPrices());
+            avgPrice.setText("Preis: " + item.getMinimunPrice() + " - " + item.getMaximumPrice() +
+                    ", Average: " + item.getAvgPrice() + " aus " + item.getNumPrices());
         }
     }
 
@@ -215,26 +211,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         if (!wishlist.isChecked()) {
             toggleWishlistView(null);
         }
-    }
-
-    private void showNoteDialog(Context context) {
-        SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
-        EditText noteText = new EditText(context);
-        noteText.setHint("Notiz");
-        noteText.setText(settings.getString(itemid, ""));
-        new AlertDialog.Builder(context)
-                .setTitle("Ihre Persönliche Notiz")
-                .setView(noteText)
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(itemid, noteText.getText().toString());
-                    editor.commit();
-
-                    changeVisibilityOfNoteField(settings);
-                    updateNote(settings);
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .show();
     }
 
     private void toggleWishlistView(Wish wish) {
@@ -263,22 +239,13 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     private View.OnClickListener getNoteListener() {
         return view -> {
-            showNoteDialog(view.getContext());
+            showNote(view.getContext());
         };
     }
 
 
-    private void changeVisibilityOfNoteField(SharedPreferences settings) {
-        if (settings.contains(itemid)) {
-            noteView.setVisibility(CardView.VISIBLE);
-        } else {
-            noteView.setVisibility(CardView.GONE);
-        }
-    }
-
     private void updateNote(SharedPreferences settings) {
-        String note = settings.getString(itemid, "");
-        noteText.setText(note);
+        noteText.setText(settings.getString(itemid, ""));
     }
 
     public void updatePrice(float priceInput) {
@@ -288,13 +255,14 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     @OnClick(R.id.shareButton)
     public void onShareBeerClickedListener(View view) {
-        String beer = model.getBeer().getValue().getId();
+        Intent sendIntent = new Intent();
+        String currentBeer = model.getBeer().getValue().getId();
         Uri.Builder builder = new Uri.Builder();
 
         builder.scheme("https")
                 .authority("beerpro.page.link")
                 .appendPath("beerdetails")
-                .appendQueryParameter("beer", beer);
+                .appendQueryParameter("currentBeer", currentBeer);
 
         DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(builder.build())
@@ -304,10 +272,39 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         Uri dynamicLinkUri = dynamicLink.getUri();
 
-        Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Link:" + dynamicLinkUri.toString());
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, ""));
+    }
+
+
+    private void changeVisibilitNote(SharedPreferences settings) {
+        if (!settings.contains(itemid)) {
+            noteView.setVisibility(CardView.GONE);
+        } else {
+            noteView.setVisibility(CardView.VISIBLE);
+        }
+    }
+
+
+    private void showNote(Context context) {
+        SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
+        EditText noteText = new EditText(context);
+        noteText.setHint("Note");
+        noteText.setText(settings.getString(itemid, ""));
+        new AlertDialog.Builder(context)
+                .setTitle("Ihre Persönliche Notiz")
+                .setView(noteText)
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(itemid, noteText.getText().toString());
+                    editor.commit();
+
+                    changeVisibilitNote(settings);
+                    updateNote(settings);
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
     }
 }

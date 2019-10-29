@@ -179,10 +179,6 @@
                             app:layout_constraintTop_toBottomOf="@+id/avgPrice" />
 
 
-
-
-
-
                         <RatingBar
                             android:id="@+id/addRatingBar"
                             android:layout_width="wrap_content"
@@ -190,7 +186,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
-                            android:isIndicator="true"
+                            android:isIndicator="false"
                             android:numStars="5"
                             android:rating="0"
                             android:stepSize="0.5"
@@ -206,7 +202,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="8dp"
-                            android:text="Meine Durchschnittliche Bewertung"
+                            android:text="Neue Bewertung durch klicken und ziehen hinzufügen"
                             android:textSize="10sp"
                             android:textStyle="italic"
                             app:layout_constraintEnd_toEndOf="parent"
