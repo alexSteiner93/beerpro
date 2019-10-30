@@ -335,7 +335,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/default_margin"
-                        android:text="Persönliche Notiz"
+                        android:text="Notiz"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <EditText
@@ -351,16 +351,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/note" />
 
-                    <Button
-                        android:id="@+id/editNote"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:text="Notiz bearbeiten"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/noteText" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

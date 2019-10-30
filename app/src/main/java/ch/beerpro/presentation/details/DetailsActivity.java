@@ -103,8 +103,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.noteText)
     EditText noteText;
 
-    @BindView(R.id.editNote)
-    Button editNote;
 
     private RatingsRecyclerViewAdapter adapter;
 
@@ -141,10 +139,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         recyclerView.setAdapter(adapter);
         SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
-        editNote.setOnClickListener(getNoteListener());
-        changeVisibilityNote(settings);
 
-        updateNote(settings);
     }
 
     private void addNewRating(RatingBar ratingBar, float v, boolean b) {
@@ -173,9 +168,29 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         });
 
+        view.findViewById(R.id.addPrivateNote).setOnClickListener(v -> {
+
+            SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
+            EditText noteText = new EditText(view.getContext());
+            noteText.setHint("Note");
+            noteText.setText(settings.getString(itemid, ""));
+            new AlertDialog.Builder(view.getContext())
+                    .setTitle("Ihre Persönliche Notiz")
+                    .setView(noteText)
+                    .setPositiveButton(android.R.string.yes, (dialo, which) -> {
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString(itemid, noteText.getText().toString());
+                        editor.commit();
+
+                        updateNote(settings);
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
+
+
+        });
 
         view.findViewById(R.id.addToFridge).setOnClickListener(v -> onFridgeClickedListener(v));
-        view.findViewById(R.id.addPrivateNote).setOnClickListener(getNoteListener());
 
         dialog.show();
     }
@@ -246,13 +261,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     }
 
 
-    private View.OnClickListener getNoteListener() {
-        return view -> {
-            showNote(view.getContext());
-        };
-    }
-
-
     private void updateNote(SharedPreferences settings) {
         noteText.setText(settings.getString(itemid, ""));
     }
@@ -309,32 +317,4 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     }
 
 
-    private void changeVisibilityNote(SharedPreferences settings) {
-        if (!settings.contains(itemid)) {
-            noteView.setVisibility(CardView.GONE);
-        } else {
-            noteView.setVisibility(CardView.VISIBLE);
-        }
-    }
-
-
-    private void showNote(Context context) {
-        SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
-        EditText noteText = new EditText(context);
-        noteText.setHint("Note");
-        noteText.setText(settings.getString(itemid, ""));
-        new AlertDialog.Builder(context)
-                .setTitle("Ihre Persönliche Notiz")
-                .setView(noteText)
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(itemid, noteText.getText().toString());
-                    editor.commit();
-
-                    changeVisibilityNote(settings);
-                    updateNote(settings);
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .show();
-    }
 }
