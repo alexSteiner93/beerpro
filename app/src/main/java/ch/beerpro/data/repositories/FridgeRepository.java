@@ -41,7 +41,7 @@ public class FridgeRepository {
 
             ArrayList<Pair<FridgeBeer, Beer>> result = new ArrayList<>();
             for (FridgeBeer FridgeBeer : FridgeBeers) {
-                Beer beer = beersById.get(FridgeBeer.getId());
+                Beer beer = beersById.get(FridgeBeer.getBeerId());
                 result.add(Pair.create(FridgeBeer, beer));
             }
             return result;
