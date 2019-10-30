@@ -56,7 +56,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     public static final String ITEM_ID = "item_id";
     private static final String TAG = "DetailsActivity";
-    public static final String NOTE = "Note";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -137,7 +136,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         model.getWish().observe(this, this::toggleWishlistView);
 
         recyclerView.setAdapter(adapter);
-        SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
+        SharedPreferences settings = getSharedPreferences("Note", MODE_PRIVATE);
         noteText.setText(settings.getString(itemid, ""));
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
 
@@ -171,23 +170,17 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         view.findViewById(R.id.addPrivateNote).setOnClickListener(v -> {
 
-            SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
+            SharedPreferences settings = getSharedPreferences("Note", MODE_PRIVATE);
             EditText noteText = new EditText(view.getContext());
             noteText.setHint("Note");
             noteText.setText(settings.getString(itemid, ""));
-            new AlertDialog.Builder(view.getContext())
-                    .setTitle("Ihre Persönliche Notiz")
-                    .setView(noteText)
+            new AlertDialog.Builder(view.getContext()).setTitle("Ihre Persönliche Notiz").setView(noteText)
                     .setPositiveButton(android.R.string.yes, (dialo, which) -> {
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(itemid, noteText.getText().toString());
                         editor.commit();
                         noteText.setText(settings.getString(itemid, ""));
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .show();
-
-
+                    }).setNegativeButton(android.R.string.no, null).show();
         });
 
         view.findViewById(R.id.addToFridge).setOnClickListener(v -> onFridgeClickedListener(v));
@@ -209,7 +202,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         toolbar.setTitle(item.getName());
         if (item.getNumPrices() == 0) { avgPrice.setText("Kein Preis Vorhanden");}
         else {
-            avgPrice.setText("Preis: " + item.getMinimumPrice() + " - " + item.getMaximumPrice() +
+            avgPrice.setText("Preis: von " + item.getMinimumPrice() + " bis " + item.getMaximumPrice() +
                     ", Average: " + item.getAvgPrice() + " aus " + item.getNumPrices());
         }
     }
@@ -259,12 +252,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-    private void updateNote(SharedPreferences settings) {
-        noteText.setText(settings.getString(itemid, ""));
-    }
-
 
     public void sendImprovement(String text){
 
