@@ -136,8 +136,8 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         model.getWish().observe(this, this::toggleWishlistView);
 
         recyclerView.setAdapter(adapter);
-        SharedPreferences settings = getSharedPreferences("Note", MODE_PRIVATE);
-        noteText.setText(settings.getString(itemid, ""));
+        SharedPreferences notePref = getSharedPreferences("Note", MODE_PRIVATE);
+        noteText.setText(notePref.getString(itemid, ""));
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
 
     }
@@ -170,16 +170,15 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         view.findViewById(R.id.addPrivateNote).setOnClickListener(v -> {
 
-            SharedPreferences settings = getSharedPreferences("Note", MODE_PRIVATE);
             EditText noteText = new EditText(view.getContext());
-            noteText.setHint("Note");
-            noteText.setText(settings.getString(itemid, ""));
+            SharedPreferences notePref = getSharedPreferences("Note", MODE_PRIVATE);
+            noteText.setText(notePref.getString(itemid, ""));
             new AlertDialog.Builder(view.getContext()).setTitle("Ihre Persönliche Notiz").setView(noteText)
                     .setPositiveButton(android.R.string.yes, (dialo, which) -> {
-                        SharedPreferences.Editor editor = settings.edit();
+                        SharedPreferences.Editor editor = notePref.edit();
                         editor.putString(itemid, noteText.getText().toString());
                         editor.commit();
-                        noteText.setText(settings.getString(itemid, ""));
+                        noteText.setText(notePref.getString(itemid, ""));
                     }).setNegativeButton(android.R.string.no, null).show();
         });
 
@@ -284,15 +283,11 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         String currentBeer = model.getBeer().getValue().getId();
         Uri.Builder builder = new Uri.Builder();
 
-        builder.scheme("https")
-                .authority("beerpro.page.link")
-                .appendPath("beerdetails")
+        builder.scheme("https").authority("beerpro.page.link").appendPath("beerdetails")
                 .appendQueryParameter("currentBeer", currentBeer);
 
-        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(builder.build())
-                .setDomainUriPrefix("beerpro.page.link")
-                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink().setLink(builder.build())
+                .setDomainUriPrefix("beerpro.page.link").setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
                 .buildDynamicLink();
 
         Uri dynamicLinkUri = dynamicLink.getUri();
