@@ -13,7 +13,6 @@ import ch.beerpro.presentation.details.DetailsActivity;
 public class improvementFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(R.layout.fragment_improvement);
         builder.setMessage("Teile uns deine Verbesserug mit oder melde eine Fehler")
@@ -22,12 +21,8 @@ public class improvementFragment extends DialogFragment {
                     String userText = et.getText().toString();
                     ((DetailsActivity)getActivity()).sendImprovement(userText);
                 })
-                .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
+                .setNegativeButton("Abbrechen", (dialog, id) -> {
                 });
-        // Create the AlertDialog object and return it
         return builder.create();
     }
 }

@@ -11,7 +11,7 @@ public class Beer implements Entity, Serializable {
     public static final String COLLECTION = "beers";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_AVGPRICE = "avgPrice";
-    public static final String FIELD_NUMPRICES = "numPrices";
+    public static final String FIELD_NUMPRICES = "numberOfPrices";
     public static final String FIELD_MAXPRICE = "maximumPrice";
     public static final String FIELD_MINPRICE = "minimumPrice";
 
@@ -25,7 +25,7 @@ public class Beer implements Entity, Serializable {
     private float avgRating;
     private int numRatings;
     private float avgPrice;
-    private int numPrices;
+    private int numberOfPrices;
     private float minimumPrice;
     private float maximumPrice;
 
@@ -54,7 +54,7 @@ public class Beer implements Entity, Serializable {
     }
 
     public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings,
-                float avgPrice, int numPrices, float minimumPrice, float maximumPrice) {
+                float avgPrice, int numberOfPrices, float minimumPrice, float maximumPrice) {
         this.id = id;
         this.manufacturer = manufacturer;
         this.name = name;
@@ -63,7 +63,7 @@ public class Beer implements Entity, Serializable {
         this.avgRating = avgRating;
         this.numRatings = numRatings;
         this.avgPrice = avgPrice;
-        this.numPrices = numPrices;
+        this.numberOfPrices = numberOfPrices;
         this.minimumPrice = minimumPrice;
         this.maximumPrice = maximumPrice;
     }
@@ -198,8 +198,8 @@ public class Beer implements Entity, Serializable {
         return minimumPrice;
     }
 
-    public int getNumPrices() {
-        return numPrices;
+    public int getNumberOfPrices() {
+        return numberOfPrices;
     }
 
     public void setMaximumPrice(float maximumPrice) {
@@ -210,8 +210,8 @@ public class Beer implements Entity, Serializable {
         this.minimumPrice = minimumPrice;
     }
 
-    public void setNumPrices(int numPrices) {
-        this.numPrices = numPrices;
+    public void setNumberOfPrices(int numberOfPrices) {
+        this.numberOfPrices = numberOfPrices;
     }
 }
 

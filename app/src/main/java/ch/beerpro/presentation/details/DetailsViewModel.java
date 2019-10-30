@@ -1,7 +1,5 @@
 package ch.beerpro.presentation.details;
 
-import android.view.View;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -70,29 +68,32 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
         return wishlistRepository.toggleUserWishlistItem(getCurrentUser().getUid(), itemId);
     }
 
-    public void updateBeerPrice(float inputPrice) {
-        if (inputPrice <= 0) {return;} // Throws away really nonsensical negative values
-        Beer b = beer.getValue();
-
-        int numPrices = b.getNumPrices();
-        float averagePrice = b.getAvgPrice();
-        if (numPrices == 0) {
-            b.setAvgPrice(inputPrice);
-            b.setNumPrices(1);
-            b.setMinimumPrice(inputPrice);
-            b.setMaximumPrice(inputPrice);
+    public void updateBeerPrice(float price) {
+        Beer currentBeer = beer.getValue();
+        float averagePrice = currentBeer.getAvgPrice();
+        if (currentBeer.getNumberOfPrices() == 0) {
+            currentBeer.setAvgPrice(price);
+            currentBeer.setNumberOfPrices(1);
+            currentBeer.setMaximumPrice(price);
+            currentBeer.setMinimumPrice(price);
         }
         else {
-            float newPrice = averagePrice * ((float)numPrices / (numPrices + 1f));
-            newPrice = newPrice + inputPrice * (1f / ((float)numPrices + 1f));
-            b.setAvgPrice(newPrice);
-            b.setNumPrices(numPrices + 1);
+            float newPrice = averagePrice * ((float)currentBeer.getNumberOfPrices() / (currentBeer.getNumberOfPrices() + 1f));
+            newPrice = newPrice + price * (1f / ((float)currentBeer.getNumberOfPrices() + 1f));
+            currentBeer.setAvgPrice(newPrice);
+            currentBeer.setNumberOfPrices(currentBeer.getNumberOfPrices() + 1);
+            
+            if(currentBeer.getMinimumPrice() > price) 
+            {
+                currentBeer.setMinimumPrice(price);
+            }
 
-            if(b.getMaximumPrice()<inputPrice) {b.setMaximumPrice(inputPrice);}
-            if(b.getMinimumPrice()>inputPrice) {b.setMinimumPrice(inputPrice);}
+            if(currentBeer.getMaximumPrice() < price) {
+                currentBeer.setMaximumPrice(price);
+            }
         }
 
-        BeersRepository.updatePrice(b);
+        BeersRepository.updatePrice(currentBeer);
     }
 
     public void addToFridge(String beerId) {

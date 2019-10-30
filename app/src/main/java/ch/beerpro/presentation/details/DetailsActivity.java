@@ -2,7 +2,6 @@ package ch.beerpro.presentation.details;
 
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,7 +11,6 @@ import ch.beerpro.presentation.details.Price.PriceFragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -175,9 +173,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
             noteText.setText(notePref.getString(itemid, ""));
             new AlertDialog.Builder(view.getContext()).setTitle("Ihre Persönliche Notiz").setView(noteText)
                     .setPositiveButton(android.R.string.yes, (dialo, which) -> {
-                        SharedPreferences.Editor editor = notePref.edit();
-                        editor.putString(itemid, noteText.getText().toString());
-                        editor.commit();
+                        SharedPreferences.Editor noteEditor = notePref.edit();
+                        noteEditor.putString(itemid, noteText.getText().toString());
+                        noteEditor.apply();
                         noteText.setText(notePref.getString(itemid, ""));
                     }).setNegativeButton(android.R.string.no, null).show();
         });
@@ -199,10 +197,10 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         avgRating.setText(getResources().getString(R.string.fmt_avg_rating, item.getAvgRating()));
         numRatings.setText(getResources().getString(R.string.fmt_ratings, item.getNumRatings()));
         toolbar.setTitle(item.getName());
-        if (item.getNumPrices() == 0) { avgPrice.setText("Kein Preis Vorhanden");}
+        if (item.getNumberOfPrices() == 0) { avgPrice.setText("Kein Preis Vorhanden");}
         else {
             avgPrice.setText("Preis: von " + item.getMinimumPrice() + " bis " + item.getMaximumPrice() +
-                    ", Average: " + item.getAvgPrice() + " aus " + item.getNumPrices());
+                    ", Durchschnitt: " + item.getAvgPrice());
         }
     }
 
