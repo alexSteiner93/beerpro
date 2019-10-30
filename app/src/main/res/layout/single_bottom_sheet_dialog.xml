@@ -94,7 +94,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/addRating"
+            android:id="@+id/addRatingButton"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -102,6 +102,23 @@
             android:drawableTop="@drawable/ic_star_black_24dp"
             android:drawableTint="@android:color/darker_gray"
             android:text="Bewertung hinzufügen"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="10sp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#ffeeeeee"/>
+
+        <Button
+            android:id="@+id/improvementButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_create_black_24dp"
+            android:drawableTint="@android:color/darker_gray"
+            android:text="Fehler melden / Verbesserungsvorschlag"
             android:textColor="@android:color/darker_gray"
             android:textSize="10sp"/>
 

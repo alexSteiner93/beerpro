@@ -45,6 +45,8 @@ import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
 import ch.beerpro.presentation.details.createrating.CreateRatingActivity;
+import ch.beerpro.presentation.details.improvement.improvementFragment;
+
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 
@@ -164,6 +166,14 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
             newFragment.show(getSupportFragmentManager(), "missiles");
 
         });
+
+        view.findViewById(R.id.improvementButton).setOnClickListener(v -> {
+            DialogFragment newFragment = new improvementFragment();
+            newFragment.show(getSupportFragmentManager(), "missiles");
+
+        });
+
+
         view.findViewById(R.id.addToFridge).setOnClickListener(v -> onFridgeClickedListener(v));
         view.findViewById(R.id.addPrivateNote).setOnClickListener(getNoteListener());
 
@@ -246,6 +256,22 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     private void updateNote(SharedPreferences settings) {
         noteText.setText(settings.getString(itemid, ""));
     }
+
+
+    public void sendImprovement(String text){
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"alexander.steiner@hsr.ch"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Improvement");
+        i.putExtra(Intent.EXTRA_TEXT   , text);
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+        }
+
+    }
+
 
     public void updatePrice(float priceInput) {
         model.updateBeerPrice(priceInput);
