@@ -77,33 +77,6 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        //Dynamic link implementation with error handler
-
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                            String beer = deepLink.getQueryParameter("beer");
-                            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                            intent.putExtra(DetailsActivity.ITEM_ID, beer);
-                            startActivity(intent);
-                        }
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("DeepLinkFailure", "getDynamicLink:onFailure", e);
-                    }
-                });
-
-
-
-
 
     }
 

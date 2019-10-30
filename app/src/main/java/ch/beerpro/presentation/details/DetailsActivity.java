@@ -296,7 +296,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(builder.build())
-                .setDynamicLinkDomain("beerpro.page.link")
+                .setDomainUriPrefix("beerpro.page.link")
                 .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
                 .buildDynamicLink();
 
