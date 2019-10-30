@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.GlideApp;
@@ -99,12 +97,8 @@ public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer
             ratingBar.setRating(item.getAvgRating());
             numRatings.setText(itemView.getResources().getString(R.string.fmt_num_ratings, item.getNumRatings()));
             itemView.setOnClickListener(v -> listener.onMoreClickedListener(photo, item));
-            String unit = "Bier";
 
-            if (fridgeBeer.getAmount() >= 1) {
-                unit = "Biere";
-            }
-            amount.setText(String.format(Locale.GERMAN, "%d %s", fridgeBeer.getAmount(), unit));
+            amount.setText(fridgeBeer.getAmount() + " Bier");
             addToFridge.setOnClickListener(v -> listener.onFridgeAddClickedListener(fridgeBeer));
             removeFromFridge.setOnClickListener(v -> listener.onFridgeRemoveClickedListener(fridgeBeer));
         }

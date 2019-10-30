@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -93,13 +94,14 @@ public class MyBeersActivity extends AppCompatActivity implements OnMyBeerItemIn
     @Override
     public void onAddNewClickedListener(Beer item) {
         model.addToFridge(item);
+        Toast.makeText(MyBeersActivity.this, "Bier wurde zum Kühlschrank hinzugefügt.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFridgeAddClickedListener(FridgeBeer fridgeBeer) {
         model.addToFridge(fridgeBeer);
     }
-
+    
     @Override
     public void onFridgeRemoveClickedListener(FridgeBeer fridgeBeer) {
         model.removeFromFridge(fridgeBeer);

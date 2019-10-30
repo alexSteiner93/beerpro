@@ -10,4 +10,5 @@ public interface OnFridgeItemInteractionListener {
     void onMoreClickedListener(ImageView photo, Beer beer);
     void onFridgeAddClickedListener(FridgeBeer fridgeBeer);
     void onFridgeRemoveClickedListener(FridgeBeer fridgeBeer);
+    
 }
