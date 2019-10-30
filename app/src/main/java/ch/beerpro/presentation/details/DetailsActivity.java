@@ -138,6 +138,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         recyclerView.setAdapter(adapter);
         SharedPreferences settings = getSharedPreferences(NOTE, MODE_PRIVATE);
+        updateNote(settings);
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
 
     }
@@ -181,7 +182,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(itemid, noteText.getText().toString());
                         editor.commit();
-
                         updateNote(settings);
                     })
                     .setNegativeButton(android.R.string.no, null)
