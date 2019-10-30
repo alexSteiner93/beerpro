@@ -104,7 +104,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.editNote)
     Button editNote;
 
-
     private RatingsRecyclerViewAdapter adapter;
 
     private DetailsViewModel model;
@@ -157,24 +156,18 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @OnClick(R.id.actionsButton)
     public void showBottomSheetDialog() {
         View view = getLayoutInflater().inflate(R.layout.single_bottom_sheet_dialog, null);
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(view);
+
         view.findViewById(R.id.addPrice).setOnClickListener(v -> {
             DialogFragment newFragment = new PriceFragment();
             newFragment.show(getSupportFragmentManager(), "missiles");
 
         });
-        BottomSheetDialog dialog = new BottomSheetDialog(this);
-        dialog.setContentView(view);
-        Button addToFridge = dialog.findViewById(R.id.addToFridge);
-        addToFridge.setOnClickListener(v -> {
-            onFridgeClickedListener(v);
-            Toast toast = Toast.makeText(DetailsActivity.this, "Das Bier wurde zum Kühlschrank hinzugefügt.", Toast.LENGTH_SHORT);
-            toast.show();
-            dialog.dismiss();
-        });
-        dialog.show();
+        view.findViewById(R.id.addToFridge).setOnClickListener(v -> onFridgeClickedListener(v));
+        view.findViewById(R.id.addPrivateNote).setOnClickListener(getNoteListener());
 
-        View addPrivateNote = view.findViewById(R.id.addPrivateNote);
-        addPrivateNote.setOnClickListener(getNoteListener());
+        dialog.show();
     }
 
     private void updateBeer(Beer item) {
@@ -212,7 +205,10 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
          * We won't get an update from firestore when the wish is removed, so we need to reset the UI state ourselves.
          * */
         if (!wishlist.isChecked()) {
+            Toast.makeText(DetailsActivity.this, "Das Bier wurde von der Wunschliste entfernt", Toast.LENGTH_SHORT).show();
             toggleWishlistView(null);
+        } else {
+            Toast.makeText(DetailsActivity.this, "Das Bier wurde zur Wunschliste hinzugefügt.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -257,6 +253,8 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     public void onFridgeClickedListener(View view) {
         model.addToFridge(model.getBeer().getValue().getId());
+        Toast.makeText(DetailsActivity.this, "Das Bier wurde zum Kühlschrank hinzugefügt.", Toast.LENGTH_SHORT).show();
+
     }
 
     @OnClick(R.id.shareButton)
