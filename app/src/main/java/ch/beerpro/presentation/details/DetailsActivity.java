@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 
+import ch.beerpro.data.repositories.BeersRepository;
 import ch.beerpro.presentation.details.Price.PriceFragment;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -186,6 +187,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     }
 
     private void updateBeer(Beer item) {
+
         name.setText(item.getName());
         manufacturer.setText(item.getManufacturer());
         category.setText(item.getCategory());
